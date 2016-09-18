@@ -5,68 +5,90 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
-public class CameraHelper {
-	private static final String TAG = CameraHelper.class.getName();
+/**
+ * Class to control and operate 
+ * camera within game
+ * @author carson
+ *
+ */
+public class CameraHelper
+{
+    private static final String TAG = CameraHelper.class.getName();
 
-	private final float MAX_ZOOM_IN = 0.25f;
-	private final float MAX_ZOOM_OUT = 10.0f;
+    private final float MAX_ZOOM_IN = 0.25f;
 
-	private Vector2 position;
-	private float zoom;
-	private Sprite target;
+    private final float MAX_ZOOM_OUT = 10.0f;
 
-	public CameraHelper() {
-		position = new Vector2();
-		zoom = 1.0f;
-	}
+    private Vector2 position;
 
-	public void update(float deltaTime) {
-		if (!hasTarget())
-			return;
-		position.x = target.getX() + target.getOriginX();
-		position.y = target.getY() + target.getOriginY();
-	}
+    private float zoom;
 
-	public void setPosition(float x, float y) {
-		this.position.set(x, y);
-	}
+    private Sprite target;
 
-	public Vector2 getPosition() {
-		return position;
-	}
+    public CameraHelper()
+    {
+        position = new Vector2();
+        zoom = 1.0f;
+    }
 
-	public void addZoom(float amount) {
-		setZoom(zoom + amount);
-	}
+    public void update(float deltaTime)
+    {
+        if (!hasTarget())
+            return;
+        position.x = target.getX() + target.getOriginX();
+        position.y = target.getY() + target.getOriginY();
+    }
 
-	public void setZoom(float zoom) {
-		this.zoom = MathUtils.clamp(zoom, MAX_ZOOM_IN, MAX_ZOOM_OUT);
-	}
+    public void setPosition(float x, float y)
+    {
+        this.position.set(x, y);
+    }
 
-	public float getZoom() {
-		return zoom;
-	}
+    public Vector2 getPosition()
+    {
+        return position;
+    }
 
-	public void setTarget(Sprite target) {
-		this.target = target;
-	}
+    public void addZoom(float amount)
+    {
+        setZoom(zoom + amount);
+    }
 
-	public Sprite getTarget() {
-		return target;
-	}
+    public void setZoom(float zoom)
+    {
+        this.zoom = MathUtils.clamp(zoom, MAX_ZOOM_IN, MAX_ZOOM_OUT);
+    }
 
-	public boolean hasTarget() {
-		return target != null;
-	}
+    public float getZoom()
+    {
+        return zoom;
+    }
 
-	public boolean hasTarget(Sprite target) {
-		return hasTarget() && this.target.equals(target);
-	}
+    public void setTarget(Sprite target)
+    {
+        this.target = target;
+    }
 
-	public void applyTo(OrthographicCamera camera) {
-		camera.position.x = position.x;
-		camera.position.y = position.y;
-		camera.zoom = zoom;
-		camera.update();
-	}
+    public Sprite getTarget()
+    {
+        return target;
+    }
+
+    public boolean hasTarget()
+    {
+        return target != null;
+    }
+
+    public boolean hasTarget(Sprite target)
+    {
+        return hasTarget() && this.target.equals(target);
+    }
+
+    public void applyTo(OrthographicCamera camera)
+    {
+        camera.position.x = position.x;
+        camera.position.y = position.y;
+        camera.zoom = zoom;
+        camera.update();
+    }
 }
