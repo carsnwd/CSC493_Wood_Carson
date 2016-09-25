@@ -163,9 +163,7 @@ public class Level
 
     /**
      * The objects drawn first are in 
-     * the back. It's like if you had a 
-     * garage and put stuff to fill it up
-     * the stuff in first is in the back. 
+     * the back.
      * @param batch
      */
     public void render(SpriteBatch batch)
