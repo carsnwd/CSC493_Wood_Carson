@@ -58,7 +58,7 @@ public class WorldRenderer implements Disposable
     {
         float x = -15;
         float y = -15;
-        batch.draw(Assets.instance.goldCoin.goldCoin, x, y, 50, 50, 100, 100, 0.35f, -0.35f, 0);
+        batch.draw(Assets.instance.bone.bone, x, y, 50, 50, 100, 100, 0.35f, -0.35f, 0);
         Assets.instance.fonts.defaultBig.draw(batch, "" + worldController.score, x + 75, y + 37);
     }
 
@@ -74,7 +74,7 @@ public class WorldRenderer implements Disposable
         {
             if (worldController.lives <= i)
                 batch.setColor(0.5f, 0.5f, 0.5f, 0.5f);
-            batch.draw(Assets.instance.bunny.head, x + i * 50, y, 50, 50, 120, 100, 0.35f, -0.35f, 0);
+            batch.draw(Assets.instance.main_character.main_character, x + i * 50, y, 50, 50, 120, 100, 0.35f, -0.35f, 0);
             batch.setColor(1, 1, 1, 1);
         }
     }

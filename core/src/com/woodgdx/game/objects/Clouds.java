@@ -54,10 +54,8 @@ public class Clouds extends AbstractGameObject
     {
         dimension.set(3.0f, 1.5f);
         regClouds = new Array<TextureRegion>();
-        regClouds.add(Assets.instance.levelDecoration.cloud01);
-        regClouds.add(Assets.instance.levelDecoration.cloud02);
-        regClouds.add(Assets.instance.levelDecoration.cloud03);
-        int distFac = 5; //How far apart the clouds should be (or how distributed they should be)
+        regClouds.add(Assets.instance.levelDecoration.cloud_decoration);
+        int distFac = 2; //How far apart the clouds should be (or how distributed they should be)
         int numClouds = (int) (length / distFac);
         clouds = new Array<Cloud>(2 * numClouds);
         for (int i = 0; i < numClouds; i++)

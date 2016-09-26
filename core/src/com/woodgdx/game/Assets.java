@@ -25,13 +25,15 @@ public class Assets implements Disposable, AssetErrorListener
     public static final Assets instance = new Assets();
 
     //Game assets 
-    public AssetBunny bunny;
-
-    public AssetRock rock;
-
-    public AssetGoldCoin goldCoin;
-
-    public AssetFeather feather;
+    public AssetBone bone;
+    public AssetCat cat_item;
+    public AssetChicken chicken_item;
+    public AssetCloud cloud;
+    public AssetDogFoodBowl dog_food_bowl;
+    public AssetDog dog_item;
+    public AssetFlame flame;
+    public AssetGround ground;
+    public AssetMainCharacter main_character;
 
     public AssetLevelDecoration levelDecoration;
 
@@ -96,10 +98,15 @@ public class Assets implements Disposable, AssetErrorListener
 
         // create game resource objects
         fonts = new AssetFonts();
-        bunny = new AssetBunny(atlas);
-        rock = new AssetRock(atlas);
-        goldCoin = new AssetGoldCoin(atlas);
-        feather = new AssetFeather(atlas);
+        bone = new AssetBone(atlas);
+        cat_item = new AssetCat(atlas);
+        chicken_item = new AssetChicken(atlas);
+        cloud = new AssetCloud(atlas);
+        dog_food_bowl = new AssetDogFoodBowl(atlas);
+        dog_item = new AssetDog(atlas);
+        flame = new AssetFlame(atlas);
+        ground = new AssetGround(atlas);
+        main_character = new AssetMainCharacter(atlas);
         levelDecoration = new AssetLevelDecoration(atlas);
     }
 
@@ -135,62 +142,139 @@ public class Assets implements Disposable, AssetErrorListener
     {
         Gdx.app.error(TAG, "Couldn't load asset '" + asset.fileName + "'", (Exception) throwable);
     }
-
+    
     /**
-     * Loads bunnyhead asset from textureatlas
+     * Loads dog food bowl asset from textureatlas
      * @author carson
      */
-    public class AssetBunny
+    public class AssetDogFoodBowl
     {
-        public final AtlasRegion head;
+        public final AtlasRegion dog_food_bowl;
 
-        public AssetBunny(TextureAtlas atlas)
+        public AssetDogFoodBowl(TextureAtlas atlas)
         {
             //Just file name no extension
-            head = atlas.findRegion("bunny_head");
+            dog_food_bowl = atlas.findRegion("dog_food_bowl");
         }
     }
-
+    
     /**
-     * Loads rock asset from textureatlas
+     * Loads bone asset from textureatlas
      * @author carson
      */
-    public class AssetRock
+    public class AssetBone
     {
-        public final AtlasRegion edge;
+        public final AtlasRegion bone;
 
-        public final AtlasRegion middle;
-
-        public AssetRock(TextureAtlas atlas)
+        public AssetBone(TextureAtlas atlas)
         {
-            edge = atlas.findRegion("rock_edge");
-            middle = atlas.findRegion("rock_middle");
+            //Just file name no extension
+            bone = atlas.findRegion("bone");
+        }
+    }
+
+
+    /**
+     * Loads cat asset from textureatlas
+     * @author carson
+     */
+    public class AssetCat
+    {
+        public final AtlasRegion cat_item;
+
+        public AssetCat(TextureAtlas atlas)
+        {
+            //Just file name no extension
+            cat_item = atlas.findRegion("cat_item");
+        }
+    }
+
+    
+    /**
+     * Loads chicken asset from textureatlas
+     * @author carson
+     */
+    public class AssetChicken
+    {
+        public final AtlasRegion chicken_item;
+
+        public AssetChicken(TextureAtlas atlas)
+        {
+            //Just file name no extension
+            chicken_item = atlas.findRegion("chicken_item");
         }
     }
 
     /**
-     * Loads coin asset from texture atlas
+     * Loads cloud asset from textureatlas
+     * @author carson
      */
-    public class AssetGoldCoin
+    public class AssetCloud
     {
-        public final AtlasRegion goldCoin;
+        public final AtlasRegion cloud;
 
-        public AssetGoldCoin(TextureAtlas atlas)
+        public AssetCloud(TextureAtlas atlas)
         {
-            goldCoin = atlas.findRegion("item_gold_coin");
+            //Just file name no extension
+            cloud = atlas.findRegion("cloud");
         }
     }
 
     /**
-     * Loads feather asset from texture atlas
+     * Loads dog item asset from textureatlas
+     * @author carson
      */
-    public class AssetFeather
+    public class AssetDog
     {
-        public final AtlasRegion feather;
+        public final AtlasRegion dog_item;
 
-        public AssetFeather(TextureAtlas atlas)
+        public AssetDog(TextureAtlas atlas)
         {
-            feather = atlas.findRegion("item_feather");
+            //Just file name no extension
+            dog_item = atlas.findRegion("dog_item");
+        }
+    }
+
+    /**
+     * Loads ground asset from textureatlas
+     * @author carson
+     */
+    public class AssetGround
+    {
+        //public final AtlasRegion edge;
+
+        public final AtlasRegion ground;
+
+        public AssetGround(TextureAtlas atlas)
+        {
+            //edge = atlas.findRegion("rock_edge");
+            ground = atlas.findRegion("ground");
+        }
+    }
+
+    /**
+     * Loads flame asset from texture atlas
+     */
+    public class AssetFlame
+    {
+        public final AtlasRegion flame;
+
+        public AssetFlame(TextureAtlas atlas)
+        {
+            flame = atlas.findRegion("flame");
+        }
+    }
+
+    /**
+     * Loads main character asset from texture atlas
+     */
+    public class AssetMainCharacter
+    {
+        public final AtlasRegion main_character;
+
+        public AssetMainCharacter(TextureAtlas atlas)
+        {
+            main_character = atlas.findRegion("main_character");
         }
     }
 
@@ -201,17 +285,11 @@ public class Assets implements Disposable, AssetErrorListener
      */
     public class AssetLevelDecoration
     {
-        public final AtlasRegion cloud01;
+        public final AtlasRegion cloud_decoration;
 
-        public final AtlasRegion cloud02;
+        public final AtlasRegion water_decoration;
 
-        public final AtlasRegion cloud03;
-
-        public final AtlasRegion mountainLeft;
-
-        public final AtlasRegion mountainRight;
-
-        public final AtlasRegion waterOverlay;
+        public final AtlasRegion tree_decoration;
 
         /**
          * Finds items on texture atlas
@@ -219,12 +297,9 @@ public class Assets implements Disposable, AssetErrorListener
          */
         public AssetLevelDecoration(TextureAtlas atlas)
         {
-            cloud01 = atlas.findRegion("cloud01");
-            cloud02 = atlas.findRegion("cloud02");
-            cloud03 = atlas.findRegion("cloud03");
-            mountainLeft = atlas.findRegion("mountain_left");
-            mountainRight = atlas.findRegion("mountain_right");
-            waterOverlay = atlas.findRegion("water_overlay");
+            cloud_decoration = atlas.findRegion("cloud_decoration");
+            water_decoration = atlas.findRegion("water_decoration");
+            tree_decoration = atlas.findRegion("tree_decoration");
         }
     }
 }

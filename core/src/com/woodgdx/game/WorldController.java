@@ -12,7 +12,7 @@ import com.badlogic.gdx.InputAdapter;
 import com.woodgdx.game.util.CameraHelper;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
-import com.woodgdx.game.objects.Rock;
+import com.woodgdx.game.objects.Ground;
 import com.woodgdx.game.util.Constants;
 
 public class WorldController extends InputAdapter

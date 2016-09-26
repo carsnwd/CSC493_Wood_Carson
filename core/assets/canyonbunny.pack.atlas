@@ -1,90 +1,97 @@
 
 canyonbunny.pack.png
-size: 1024,1024
+size: 512,256
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 arial-15
   rotate: false
-  xy: 155, 314
+  xy: 254, 124
   size: 256, 128
   orig: 256, 128
   offset: 0, 0
   index: -1
-bunny_head
+bone
   rotate: false
-  xy: 2, 2
-  size: 122, 82
-  orig: 122, 82
+  xy: 432, 31
+  size: 48, 48
+  orig: 48, 48
   offset: 0, 0
   index: -1
-cloud01
+cat_item
   rotate: false
-  xy: 155, 144
-  size: 178, 78
-  orig: 178, 78
+  xy: 164, 37
+  size: 73, 61
+  orig: 73, 61
   offset: 0, 0
   index: -1
-cloud02
+chicken_item
   rotate: false
-  xy: 155, 224
-  size: 198, 88
-  orig: 198, 88
+  xy: 239, 54
+  size: 41, 44
+  orig: 41, 44
   offset: 0, 0
   index: -1
-cloud03
+cloud
   rotate: false
-  xy: 413, 357
-  size: 182, 85
-  orig: 182, 85
+  xy: 2, 100
+  size: 250, 152
+  orig: 250, 152
   offset: 0, 0
   index: -1
-item_feather
+cloud_decoration
   rotate: false
-  xy: 413, 315
-  size: 46, 40
-  orig: 46, 40
+  xy: 2, 13
+  size: 160, 85
+  orig: 160, 85
   offset: 0, 0
   index: -1
-item_gold_coin
+dog_food_bowl
   rotate: false
-  xy: 597, 386
-  size: 56, 56
-  orig: 56, 56
+  xy: 164, 2
+  size: 42, 33
+  orig: 42, 33
   offset: 0, 0
   index: -1
-mountain_left
+dog_item
   rotate: false
-  xy: 2, 671
-  size: 1000, 225
-  orig: 1000, 225
+  xy: 432, 81
+  size: 65, 41
+  orig: 65, 41
   offset: 0, 0
   index: -1
-mountain_right
+flame
   rotate: false
-  xy: 2, 444
-  size: 1000, 225
-  orig: 1000, 225
+  xy: 208, 3
+  size: 32, 32
+  orig: 32, 32
   offset: 0, 0
   index: -1
-rock_edge
+ground
   rotate: false
-  xy: 90, 86
-  size: 63, 356
-  orig: 63, 356
+  xy: 282, 65
+  size: 47, 40
+  orig: 47, 40
   offset: 0, 0
   index: -1
-rock_middle
+main_character
   rotate: false
-  xy: 2, 86
-  size: 86, 356
-  orig: 86, 356
+  xy: 360, 59
+  size: 70, 63
+  orig: 70, 63
   offset: 0, 0
   index: -1
-water_overlay
+tree_decoration
   rotate: false
-  xy: 355, 152
-  size: 32, 160
-  orig: 32, 160
+  xy: 254, 107
+  size: 104, 15
+  orig: 104, 15
+  offset: 0, 0
+  index: -1
+water_decoration
+  rotate: false
+  xy: 242, 13
+  size: 46, 39
+  orig: 46, 39
   offset: 0, 0
   index: -1

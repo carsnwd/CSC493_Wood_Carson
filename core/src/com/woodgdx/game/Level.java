@@ -6,9 +6,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
 import com.woodgdx.game.objects.AbstractGameObject;
 import com.woodgdx.game.objects.Clouds;
-import com.woodgdx.game.objects.Mountains;
-import com.woodgdx.game.objects.Rock;
-import com.woodgdx.game.objects.WaterOverlay;
+import com.woodgdx.game.objects.Tree;
+import com.woodgdx.game.objects.Ground;
+import com.woodgdx.game.objects.Water;
 
 /**
  * Imports the level data
@@ -63,14 +63,14 @@ public class Level
     }
 
     // objects
-    public Array<Rock> rocks;
+    public Array<Ground> rocks;
 
     // decoration
     public Clouds clouds;
 
-    public Mountains mountains;
+    public Tree mountains;
 
-    public WaterOverlay waterOverlay;
+    public Water waterOverlay;
 
     public Level(String filename)
     {
@@ -86,7 +86,7 @@ public class Level
      */
     private void init(String filename)
     {
-        rocks = new Array<Rock>();
+        rocks = new Array<Ground>();
         // load image file that represents the level data
         Pixmap pixmap = new Pixmap(Gdx.files.internal(filename));
         // scan pixels from top-left to bottom-right
@@ -114,11 +114,11 @@ public class Level
                 {
                     if (lastPixel != currentPixel)
                     {
-                        obj = new Rock();
+                        obj = new Ground();
                         float heightIncreaseFactor = 0.25f;
                         offsetHeight = -2.5f;
                         obj.position.set(pixelX, baseHeight * obj.dimension.y * heightIncreaseFactor + offsetHeight);
-                        rocks.add((Rock) obj);
+                        rocks.add((Ground) obj);
                     }
                     else
                     {
@@ -152,9 +152,9 @@ public class Level
         // decoration
         clouds = new Clouds(pixmap.getWidth());
         clouds.position.set(0, 2);
-        mountains = new Mountains(pixmap.getWidth());
+        mountains = new Tree(pixmap.getWidth());
         mountains.position.set(-1, -1);
-        waterOverlay = new WaterOverlay(pixmap.getWidth());
+        waterOverlay = new Water(pixmap.getWidth());
         waterOverlay.position.set(0, -3.75f);
         // free memory
         pixmap.dispose();
@@ -171,7 +171,7 @@ public class Level
         // Draw Mountains
         mountains.render(batch);
         // Draw Rocks
-        for (Rock rock : rocks)
+        for (Ground rock : rocks)
         rock.render(batch);
         // Draw Water Overlay
         waterOverlay.render(batch);
