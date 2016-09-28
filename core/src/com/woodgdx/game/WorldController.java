@@ -254,7 +254,6 @@ public class WorldController extends InputAdapter
         dogFoodBowl.collected = true;
         score += dogFoodBowl.getScore();
         level.mainChar.setDogFoodPowerup(true);
-        ;
         Gdx.app.log(TAG, "dogfoodbowl collected");
     }
 

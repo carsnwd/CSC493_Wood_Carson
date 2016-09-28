@@ -14,7 +14,7 @@ import com.badlogic.gdx.tools.texturepacker.TexturePacker.Settings;
 public class DesktopLauncher 
 {
 	//TexturePacker related
-	private static boolean rebuildAtlas = true; //CHANGE WHEN YOU HAVE NEW ASSETS
+	private static boolean rebuildAtlas = false; //CHANGE WHEN YOU HAVE NEW ASSETS
 	private static boolean drawDebugOutline = false;
 	
 	public static void main (String[] arg) 

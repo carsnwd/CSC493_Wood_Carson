@@ -127,6 +127,8 @@ public class MainChar extends AbstractGameObject
         if (pickedUp)
         {
             timeLeftDogFoodPowerup = Constants.ITEM_DOGFOOD_POWERUP_DURATION;
+            // Set physics values
+            terminalVelocity.set(6.0f, 8.0f);
         }
     }
 
@@ -162,6 +164,7 @@ public class MainChar extends AbstractGameObject
                 // disable power-up
                 timeLeftDogFoodPowerup = 0;
                 setDogFoodPowerup(false);
+                terminalVelocity.set(3.0f, 4.0f);
             }
         }
     }
