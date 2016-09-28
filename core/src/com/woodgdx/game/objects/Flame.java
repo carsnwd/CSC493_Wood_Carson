@@ -56,6 +56,6 @@ public class Flame extends AbstractGameObject
      */
     public int getScore()
     {
-        return 200;
+        return -200;
     }
 }

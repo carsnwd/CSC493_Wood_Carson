@@ -15,6 +15,10 @@ import com.badlogic.gdx.utils.Array;
 import com.woodgdx.game.objects.Ground;
 import com.woodgdx.game.util.Constants;
 import com.badlogic.gdx.math.Rectangle;
+import com.woodgdx.game.objects.Cat;
+import com.woodgdx.game.objects.Chicken;
+import com.woodgdx.game.objects.Dog;
+import com.woodgdx.game.objects.Flame;
 import com.woodgdx.game.objects.MainChar;
 import com.woodgdx.game.objects.MainChar.JUMP_STATE;
 import com.woodgdx.game.objects.DogFoodBowl;
@@ -243,6 +247,54 @@ public class WorldController extends InputAdapter
         score += bone.getScore();
         Gdx.app.log(TAG, "bone collected");
     }
+    
+    /**
+     * When the main char and dog collide.
+     * Increase score and makes bone invisible
+     * @param bone
+     */
+    private void onCollisionMainCharWithDog(Dog dog)
+    {
+        dog.collected = true;
+        score += dog.getScore();
+        Gdx.app.log(TAG, "Dog collected");
+    }
+    
+    /**
+     * When the main char and chicken collide.
+     * Increase score and makes bone invisible
+     * @param bone
+     */
+    private void onCollisionMainCharWithCat(Cat cat)
+    {
+        cat.collected = true;
+        score += cat.getScore();
+        Gdx.app.log(TAG, "Cat collected");
+    }
+    
+    /**
+     * When the main char and chicken collide.
+     * Increase score and makes bone invisible
+     * @param bone
+     */
+    private void onCollisionMainCharWithChicken(Chicken chicken)
+    {
+        chicken.collected = true;
+        score += chicken.getScore();
+        Gdx.app.log(TAG, "Chicken collected");
+    }
+    
+    /**
+     * When the main char and flame collide.
+     * Increase score and makes bone invisible
+     * @param bone
+     */
+    private void onCollisionMainCharWithFlame(Flame flame)
+    {
+        flame.collected = true;
+        score += flame.getScore();
+        Gdx.app.log(TAG, "Flame collected");
+    }
 
     /**
      * When the mainchar and dogfoodbowl collide
@@ -282,6 +334,50 @@ public class WorldController extends InputAdapter
             if (!r1.overlaps(r2))
                 continue;
             onCollisionMainCharWithBone(bone);
+            break;
+        }
+        // Test collision: mainchar  <-> dogs
+        for (Dog dog : level.dogs)
+        {
+            if (dog.collected)
+                continue;
+            r2.set(dog.position.x, dog.position.y, dog.bounds.width, dog.bounds.height);
+            if (!r1.overlaps(r2))
+                continue;
+            onCollisionMainCharWithDog(dog);
+            break;
+        }
+        // Test collision: mainchar  <-> cats
+        for (Cat cat : level.cats)
+        {
+            if (cat.collected)
+                continue;
+            r2.set(cat.position.x, cat.position.y, cat.bounds.width, cat.bounds.height);
+            if (!r1.overlaps(r2))
+                continue;
+            onCollisionMainCharWithCat(cat);
+            break;
+        }
+        // Test collision: mainchar  <-> chickens
+        for (Chicken chicken : level.chickens)
+        {
+            if (chicken.collected)
+                continue;
+            r2.set(chicken.position.x, chicken.position.y, chicken.bounds.width, chicken.bounds.height);
+            if (!r1.overlaps(r2))
+                continue;
+            onCollisionMainCharWithChicken(chicken);
+            break;
+        }
+        // Test collision: mainchar  <-> flames
+        for (Flame flame : level.flames)
+        {
+            if (flame.collected)
+                continue;
+            r2.set(flame.position.x, flame.position.y, flame.bounds.width, flame.bounds.height);
+            if (!r1.overlaps(r2))
+                continue;
+            onCollisionMainCharWithFlame(flame);
             break;
         }
         // Test collision: mainchar  <-> dogfoodbowls
