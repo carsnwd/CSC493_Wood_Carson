@@ -14,16 +14,26 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.woodgdx.game.objects.Ground;
 import com.woodgdx.game.util.Constants;
+import com.badlogic.gdx.math.Rectangle;
+import com.woodgdx.game.objects.MainChar;
+import com.woodgdx.game.objects.MainChar.JUMP_STATE;
+import com.woodgdx.game.objects.DogFoodBowl;
+import com.woodgdx.game.objects.Bone;
+import com.woodgdx.game.objects.Ground;
 
 public class WorldController extends InputAdapter
 {
     private static final String TAG = WorldController.class.getName();
 
     public Level level;
+
     //Current lives
     public int lives;
+
     //Current score
     public int score;
+
+    private float timeLeftGameOverDelay;
 
     /**
      * Initializes level
@@ -32,6 +42,7 @@ public class WorldController extends InputAdapter
     {
         score = 0;
         level = new Level(Constants.LEVEL_01);
+        cameraHelper.setTarget(level.mainChar);
     }
 
     public CameraHelper cameraHelper;
@@ -53,6 +64,7 @@ public class WorldController extends InputAdapter
         Gdx.input.setInputProcessor(this);
         cameraHelper = new CameraHelper();
         lives = Constants.LIVES_START;
+        timeLeftGameOverDelay = 0;
         initLevel();
     }
 
@@ -80,8 +92,29 @@ public class WorldController extends InputAdapter
      */
     public void update(float deltaTime)
     {
-        handleDebugInput(deltaTime);
+        if (isGameOver())
+        {
+            timeLeftGameOverDelay -= deltaTime;
+            if (timeLeftGameOverDelay < 0)
+                init();
+        }
+        else
+        {
+            handleDebugInput(deltaTime);
+        }
+        handleInputGame(deltaTime);
+        level.update(deltaTime);
+        testCollisions();
         cameraHelper.update(deltaTime);
+        //Takes away lives when fallen in water
+        if (!isGameOver() && isPlayerInWater())
+        {
+            lives--;
+            if (isGameOver())
+                timeLeftGameOverDelay = Constants.TIME_DELAY_GAME_OVER;
+            else
+                initLevel();
+        }
     }
 
     /**
@@ -92,22 +125,24 @@ public class WorldController extends InputAdapter
     {
         if (Gdx.app.getType() != ApplicationType.Desktop)
             return;
-
-        // Camera Controls (move)
-        float camMoveSpeed = 5 * deltaTime;
-        float camMoveSpeedAccelerationFactor = 5;
-        if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT))
-            camMoveSpeed *= camMoveSpeedAccelerationFactor;
-        if (Gdx.input.isKeyPressed(Keys.LEFT))
-            moveCamera(-camMoveSpeed, 0);
-        if (Gdx.input.isKeyPressed(Keys.RIGHT))
-            moveCamera(camMoveSpeed, 0);
-        if (Gdx.input.isKeyPressed(Keys.UP))
-            moveCamera(0, camMoveSpeed);
-        if (Gdx.input.isKeyPressed(Keys.DOWN))
-            moveCamera(0, -camMoveSpeed);
-        if (Gdx.input.isKeyPressed(Keys.BACKSPACE))
-            cameraHelper.setPosition(0, 0);
+        if (!cameraHelper.hasTarget(level.mainChar))
+        {
+            // Camera Controls (move)
+            float camMoveSpeed = 5 * deltaTime;
+            float camMoveSpeedAccelerationFactor = 5;
+            if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT))
+                camMoveSpeed *= camMoveSpeedAccelerationFactor;
+            if (Gdx.input.isKeyPressed(Keys.LEFT))
+                moveCamera(-camMoveSpeed, 0);
+            if (Gdx.input.isKeyPressed(Keys.RIGHT))
+                moveCamera(camMoveSpeed, 0);
+            if (Gdx.input.isKeyPressed(Keys.UP))
+                moveCamera(0, camMoveSpeed);
+            if (Gdx.input.isKeyPressed(Keys.DOWN))
+                moveCamera(0, -camMoveSpeed);
+            if (Gdx.input.isKeyPressed(Keys.BACKSPACE))
+                cameraHelper.setPosition(0, 0);
+        }
 
         // Camera Controls (zoom)
         float camZoomSpeed = 1 * deltaTime;
@@ -146,6 +181,179 @@ public class WorldController extends InputAdapter
             init();
             Gdx.app.debug(TAG, "Game world resetted");
         }
+        // Toggle camera follow (mainchar or free camera)
+        else if (keycode == Keys.ENTER)
+        {
+            cameraHelper.setTarget(cameraHelper.hasTarget() ? null : level.mainChar);
+            Gdx.app.debug(TAG, "Camera follow enabled: " + cameraHelper.hasTarget());
+        }
         return false;
     }
+
+    // Rectangles for collision detection
+    private Rectangle r1 = new Rectangle();
+
+    private Rectangle r2 = new Rectangle();
+
+    /**
+     * When the rock and mainchar collide
+     * Prevents mainchar  from falling through the rock
+     * @param ground
+     */
+    private void onCollisionmaincharWithRock(Ground ground)
+    {
+        MainChar mainchar = level.mainChar;
+        float heightDifference = Math.abs(mainchar.position.y - (ground.position.y + ground.bounds.height));
+        if (heightDifference > 0.25f)
+        {
+            boolean hitRightEdge = mainchar.position.x > (ground.position.x + ground.bounds.width / 2.0f);
+            if (hitRightEdge)
+            {
+                mainchar.position.x = ground.position.x + ground.bounds.width;
+            }
+            else
+            {
+                mainchar.position.x = ground.position.x - mainchar.bounds.width;
+            }
+            return;
+        }
+        switch (mainchar.jumpState)
+        {
+        case GROUNDED:
+            break;
+        case FALLING:
+        case JUMP_FALLING:
+            mainchar.position.y = ground.position.y + mainchar.bounds.height + mainchar.origin.y;
+            mainchar.jumpState = JUMP_STATE.GROUNDED;
+            break;
+        case JUMP_RISING:
+            mainchar.position.y = ground.position.y + mainchar.bounds.height + mainchar.origin.y;
+            break;
+        }
+    }
+
+    /**
+     * When the main char and bone collide.
+     * Increase score and makes bone invisible
+     * @param bone
+     */
+    private void onCollisionMainCharWithBone(Bone bone)
+    {
+        bone.collected = true;
+        score += bone.getScore();
+        Gdx.app.log(TAG, "bone collected");
+    }
+
+    /**
+     * When the mainchar and dogfoodbowl collide
+     * Increase score and makes dogfoodbowl invisible
+     * @param dogFoodBowl
+     */
+    private void onCollisionMainCharWithDogFoodBowl(DogFoodBowl dogFoodBowl)
+    {
+        dogFoodBowl.collected = true;
+        score += dogFoodBowl.getScore();
+        level.mainChar.setDogFoodPowerup(true);
+        ;
+        Gdx.app.log(TAG, "dogfoodbowl collected");
+    }
+
+    /**
+     * Tests if there is a collision with each object and the mainchar 
+     */
+    private void testCollisions()
+    {
+        r1.set(level.mainChar.position.x, level.mainChar.position.y, level.mainChar.bounds.width, level.mainChar.bounds.height);
+        // Test collision: mainchar  <-> Rocks
+        for (Ground ground : level.rocks)
+        {
+            r2.set(ground.position.x, ground.position.y, ground.bounds.width, ground.bounds.height);
+            if (!r1.overlaps(r2))
+                continue;
+            onCollisionmaincharWithRock(ground);
+            // IMPORTANT: must do all collisions for valid
+            // edge testing on rocks.
+        }
+        // Test collision: mainchar  <-> bones
+        for (Bone bone : level.bones)
+        {
+            if (bone.collected)
+                continue;
+            r2.set(bone.position.x, bone.position.y, bone.bounds.width, bone.bounds.height);
+            if (!r1.overlaps(r2))
+                continue;
+            onCollisionMainCharWithBone(bone);
+            break;
+        }
+        // Test collision: mainchar  <-> dogfoodbowls
+        for (DogFoodBowl dogFoodBowl : level.dogFoodBowls)
+        {
+            if (dogFoodBowl.collected)
+                continue;
+            r2.set(dogFoodBowl.position.x, dogFoodBowl.position.y, dogFoodBowl.bounds.width, dogFoodBowl.bounds.height);
+            if (!r1.overlaps(r2))
+                continue;
+            onCollisionMainCharWithDogFoodBowl(dogFoodBowl);
+            break;
+        }
+    }
+
+    /**
+     * Handles the input for the game
+     * Movement of mainchar  in particular
+     * @param deltaTime
+     */
+    private void handleInputGame(float deltaTime)
+    {
+        if (cameraHelper.hasTarget(level.mainChar))
+        {
+            // Player Movement
+            if (Gdx.input.isKeyPressed(Keys.LEFT))
+            {
+                level.mainChar.velocity.x = -level.mainChar.terminalVelocity.x;
+            }
+            else if (Gdx.input.isKeyPressed(Keys.RIGHT))
+            {
+                level.mainChar.velocity.x = level.mainChar.terminalVelocity.x;
+            }
+            else
+            {
+                // Execute auto-forward movement on non-desktop platform
+                if (Gdx.app.getType() != ApplicationType.Desktop)
+                {
+                    level.mainChar.velocity.x = level.mainChar.terminalVelocity.x;
+                }
+            }
+            // mainchar Jump
+            if (Gdx.input.isTouched() || Gdx.input.isKeyPressed(Keys.SPACE))
+            {
+                level.mainChar.setJumping(true);
+            }
+            else
+            {
+                level.mainChar.setJumping(false);
+            }
+        }
+    }
+
+    /**
+     * Checks if the player
+     * has anymore lives
+     * @return
+     */
+    public boolean isGameOver()
+    {
+        return lives < 0;
+    }
+
+    /**
+     * If the player is at the bottom
+     * of the screen, then it is under water
+     * @return
+     */
+    public boolean isPlayerInWater()
+    {
+        return level.mainChar.position.y < -5;
+    }
+
 }

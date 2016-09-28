@@ -13,7 +13,7 @@ import com.woodgdx.game.Assets;
 public class Ground extends AbstractGameObject
 {
     //Left and right edge texture (Same thing, mirror images)
-//    private TextureRegion regEdge;
+    //    private TextureRegion regEdge;
 
     //Middle texture for the ground
     private TextureRegion regGround;
@@ -52,6 +52,8 @@ public class Ground extends AbstractGameObject
     public void increaseLength(int amount)
     {
         setLength(length + amount);
+        // Update bounding box for collision detection
+        bounds.set(0, 0, dimension.x * length, dimension.y);
     }
 
     /**

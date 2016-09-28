@@ -13,7 +13,7 @@ import com.woodgdx.game.Assets;
  * @author carson wood
  *
  */
-public class Clouds extends AbstractGameObject
+public class Cloud_Decoration extends AbstractGameObject
 {
     //Size of the cloud objects
     private float length;
@@ -44,7 +44,7 @@ public class Clouds extends AbstractGameObject
         }
     }
 
-    public Clouds(float length)
+    public Cloud_Decoration(float length)
     {
         this.length = length;
         init();

@@ -11,14 +11,14 @@ import com.woodgdx.game.Assets;
  * @author carson wood
  *
  */
-public class Tree extends AbstractGameObject
+public class Tree_Decoration extends AbstractGameObject
 {
     //Tree texture
     private TextureRegion tree;
     //How long to make the tree texture
     private int length;
 
-    public Tree(int length)
+    public Tree_Decoration(int length)
     {
         this.length = length;
         init();

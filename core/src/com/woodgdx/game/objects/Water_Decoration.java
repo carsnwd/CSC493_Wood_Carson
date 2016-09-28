@@ -9,7 +9,7 @@ import com.woodgdx.game.Assets;
  * AbstractGameObject in mind
  * @author carson wood
  */
-public class Water extends AbstractGameObject
+public class Water_Decoration extends AbstractGameObject
 {
     //Just one texture for water unlike mts and rock
     private TextureRegion water;
@@ -17,7 +17,7 @@ public class Water extends AbstractGameObject
     //Length of the water object
     private float length;
 
-    public Water(float length)
+    public Water_Decoration(float length)
     {
         this.length = length;
         init();

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import com.woodgdx.game.util.Constants;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -111,6 +112,25 @@ public class WorldRenderer implements Disposable
     }
 
     /**
+     * Finds center of game window
+     * and prints game over message
+     * @param batch
+     */
+    private void renderGuiGameOverMessage(SpriteBatch batch)
+    {
+        float x = cameraGUI.viewportWidth / 2;
+        float y = cameraGUI.viewportHeight / 2;
+        if (worldController.isGameOver())
+        {
+            BitmapFont fontGameOver = Assets.instance.fonts.defaultBig;
+            fontGameOver.setColor(1, 0.75f, 0.25f, 1);
+            fontGameOver.draw(batch, "GAME OVER", x, y, 0, Align.center, false);
+            fontGameOver.setColor(1, 1, 1, 1);
+        }
+
+    }
+
+    /**
      * Renders the GUI camera and elements
      * @param batch
      */
@@ -121,11 +141,43 @@ public class WorldRenderer implements Disposable
         // draw collected gold coins icon + text
         // (anchored to top left edge)
         renderGuiScore(batch);
+        // draw collected feather icon (anchored to top left edge)
+        renderGuiDogFoodPowerup(batch);
         // draw extra lives icon + text (anchored to top right edge)
         renderGuiExtraLive(batch);
         // draw FPS text (anchored to bottom right edge)
         renderGuiFpsCounter(batch);
+        // draw game over text
+        renderGuiGameOverMessage(batch);
         batch.end();
+    }
+
+    /**
+     * Checks if there is still time on the power up
+     * and will display remaining time. 
+     * @param batch
+     */
+    private void renderGuiDogFoodPowerup(SpriteBatch batch)
+    {
+        float x = -15;
+        float y = 30;
+        float timeLeftDogFoodPowerup = worldController.level.mainChar.timeLeftDogFoodPowerup;
+        if (timeLeftDogFoodPowerup > 0)
+        {
+            // Start icon fade in/out if the left power-up time
+            // is less than 4 seconds. The fade interval is set
+            // to 5 changes per second.
+            if (timeLeftDogFoodPowerup < 4)
+            {
+                if (((int) (timeLeftDogFoodPowerup * 5) % 2) != 0)
+                {
+                    batch.setColor(1, 1, 1, 0.5f);
+                }
+            }
+            batch.draw(Assets.instance.dog_food_bowl.dogFoodBowl, x, y, 50, 50, 100, 100, 0.35f, -0.35f, 0);
+            batch.setColor(1, 1, 1, 1);
+            Assets.instance.fonts.defaultSmall.draw(batch, "" + (int) timeLeftDogFoodPowerup, x + 60, y + 57);
+        }
     }
 
     /**

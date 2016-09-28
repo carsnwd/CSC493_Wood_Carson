@@ -28,7 +28,7 @@ public class Assets implements Disposable, AssetErrorListener
     public AssetBone bone;
     public AssetCat cat_item;
     public AssetChicken chicken_item;
-    public AssetCloud cloud;
+//    public AssetCloud cloud;
     public AssetDogFoodBowl dog_food_bowl;
     public AssetDog dog_item;
     public AssetFlame flame;
@@ -101,7 +101,7 @@ public class Assets implements Disposable, AssetErrorListener
         bone = new AssetBone(atlas);
         cat_item = new AssetCat(atlas);
         chicken_item = new AssetChicken(atlas);
-        cloud = new AssetCloud(atlas);
+//        cloud = new AssetCloud(atlas);
         dog_food_bowl = new AssetDogFoodBowl(atlas);
         dog_item = new AssetDog(atlas);
         flame = new AssetFlame(atlas);
@@ -149,12 +149,12 @@ public class Assets implements Disposable, AssetErrorListener
      */
     public class AssetDogFoodBowl
     {
-        public final AtlasRegion dog_food_bowl;
+        public final AtlasRegion dogFoodBowl;
 
         public AssetDogFoodBowl(TextureAtlas atlas)
         {
             //Just file name no extension
-            dog_food_bowl = atlas.findRegion("dog_food_bowl");
+            dogFoodBowl = atlas.findRegion("dog_food_bowl");
         }
     }
     
@@ -204,21 +204,36 @@ public class Assets implements Disposable, AssetErrorListener
             chicken_item = atlas.findRegion("chicken_item");
         }
     }
-
+    
     /**
-     * Loads cloud asset from textureatlas
+     * Loads flame asset from textureatlas
      * @author carson
      */
-    public class AssetCloud
+    public class AssetFlame
     {
-        public final AtlasRegion cloud;
+        public final AtlasRegion flame;
 
-        public AssetCloud(TextureAtlas atlas)
+        public AssetFlame(TextureAtlas atlas)
         {
             //Just file name no extension
-            cloud = atlas.findRegion("cloud");
+            flame = atlas.findRegion("flame");
         }
     }
+
+//    /**
+//     * Loads cloud asset from textureatlas
+//     * @author carson
+//     */
+//    public class AssetCloud
+//    {
+//        public final AtlasRegion cloud;
+//
+//        public AssetCloud(TextureAtlas atlas)
+//        {
+//            //Just file name no extension
+//            cloud = atlas.findRegion("cloud");
+//        }
+//    }
 
     /**
      * Loads dog item asset from textureatlas
@@ -249,19 +264,6 @@ public class Assets implements Disposable, AssetErrorListener
         {
             //edge = atlas.findRegion("rock_edge");
             ground = atlas.findRegion("ground");
-        }
-    }
-
-    /**
-     * Loads flame asset from texture atlas
-     */
-    public class AssetFlame
-    {
-        public final AtlasRegion flame;
-
-        public AssetFlame(TextureAtlas atlas)
-        {
-            flame = atlas.findRegion("flame");
         }
     }
 
