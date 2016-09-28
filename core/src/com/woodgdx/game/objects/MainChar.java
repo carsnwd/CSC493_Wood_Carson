@@ -15,7 +15,7 @@ public class MainChar extends AbstractGameObject
 {
     public static final String TAG = MainChar.class.getName();
 
-    private final float JUMP_TIME_MAX = 0.3f;
+    private final float JUMP_TIME_MAX = 0.6f;
 
     private final float JUMP_TIME_MIN = 0.1f;
 
