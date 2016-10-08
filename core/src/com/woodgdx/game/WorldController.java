@@ -20,6 +20,9 @@ import com.woodgdx.game.objects.BunnyHead.JUMP_STATE;
 import com.woodgdx.game.objects.Feather;
 import com.woodgdx.game.objects.GoldCoin;
 import com.woodgdx.game.objects.Rock;
+import com.badlogic.gdx.Game;
+import com.woodgdx.game.screens.MenuScreen;
+import com.woodgdx.game.util.GamePreferences;
 
 public class WorldController extends InputAdapter
 {
@@ -36,6 +39,9 @@ public class WorldController extends InputAdapter
     //Time left after game over delay
     private float timeLeftGameOverDelay;
 
+    //Instance of Game, switch between screens.
+    private Game game;
+
     /**
      * Initializes level
      */
@@ -51,8 +57,9 @@ public class WorldController extends InputAdapter
     /**
      * Constructor that calls on init()
      */
-    public WorldController()
+    public WorldController(Game game)
     {
+        this.game = game;
         init();
     }
 
@@ -99,7 +106,7 @@ public class WorldController extends InputAdapter
         {
             timeLeftGameOverDelay -= deltaTime;
             if (timeLeftGameOverDelay < 0)
-                init();
+                backToMenu();
         }
         else
         {
@@ -188,6 +195,11 @@ public class WorldController extends InputAdapter
         {
             cameraHelper.setTarget(cameraHelper.hasTarget() ? null : level.bunnyHead);
             Gdx.app.debug(TAG, "Camera follow enabled: " + cameraHelper.hasTarget());
+        }
+        // Back to Menu
+        else if (keycode == Keys.ESCAPE || keycode == Keys.BACK)
+        {
+            backToMenu();
         }
         return false;
     }
@@ -355,5 +367,14 @@ public class WorldController extends InputAdapter
     public boolean isPlayerInWater()
     {
         return level.bunnyHead.position.y < -5;
+    }
+
+    /**
+     * Goes back to the menu.
+     */
+    private void backToMenu()
+    {
+        // switch to menu screen
+        game.setScreen(new MenuScreen(game));
     }
 }
