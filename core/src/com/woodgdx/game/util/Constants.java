@@ -34,7 +34,7 @@ public class Constants
     // Delay after game over
     public static final float TIME_DELAY_GAME_OVER = 3;
 
-    public static final String TEXTURE_ATLAS_UI = "../core/assets/canyonbunny-ui.pack";
+    public static final String TEXTURE_ATLAS_UI = "../core/assets/canyonbunny-ui.pack.atlas";
 
     public static final String TEXTURE_ATLAS_LIBGDX_UI = "../core/assets/uiskin.atlas";
 
@@ -43,5 +43,5 @@ public class Constants
 
     public static final String SKIN_CANYONBUNNY_UI = "../core/assets/canyonbunny-ui.json";
 
-    public static final String PREFERENCES = null;
+    public static final String PREFERENCES = "cannonbunny.prefs";
 }
