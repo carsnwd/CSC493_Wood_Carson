@@ -1,5 +1,5 @@
 
-canyonbunny.pack2.png
+canyonbunny-ui.pack.png
 size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
@@ -152,7 +152,7 @@ water_overlay
   offset: 0, 0
   index: -1
 
-canyonbunny.pack3.png
+canyonbunny-ui.pack2.png
 size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
