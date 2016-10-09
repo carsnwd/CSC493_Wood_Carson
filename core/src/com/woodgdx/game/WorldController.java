@@ -24,12 +24,16 @@ import com.woodgdx.game.objects.MainChar.JUMP_STATE;
 import com.woodgdx.game.objects.DogFoodBowl;
 import com.woodgdx.game.objects.Bone;
 import com.woodgdx.game.objects.Ground;
+import com.badlogic.gdx.Game;
+import com.woodgdx.game.screens.MenuScreen;
 
 public class WorldController extends InputAdapter
 {
     private static final String TAG = WorldController.class.getName();
 
     public Level level;
+
+    private Game game;
 
     //Current lives
     public int lives;
@@ -54,8 +58,9 @@ public class WorldController extends InputAdapter
     /**
      * Constructor that calls on init()
      */
-    public WorldController()
+    public WorldController(Game game)
     {
+        this.game = game;
         init();
     }
 
@@ -100,7 +105,7 @@ public class WorldController extends InputAdapter
         {
             timeLeftGameOverDelay -= deltaTime;
             if (timeLeftGameOverDelay < 0)
-                init();
+                backToMenu();
         }
         else
         {
@@ -191,6 +196,11 @@ public class WorldController extends InputAdapter
             cameraHelper.setTarget(cameraHelper.hasTarget() ? null : level.mainChar);
             Gdx.app.debug(TAG, "Camera follow enabled: " + cameraHelper.hasTarget());
         }
+        // Back to Menu
+        else if (keycode == Keys.ESCAPE || keycode == Keys.BACK)
+        {
+            backToMenu();
+        }
         return false;
     }
 
@@ -247,7 +257,7 @@ public class WorldController extends InputAdapter
         score += bone.getScore();
         Gdx.app.log(TAG, "bone collected");
     }
-    
+
     /**
      * When the main char and dog collide.
      * Increase score and makes bone invisible
@@ -259,7 +269,7 @@ public class WorldController extends InputAdapter
         score += dog.getScore();
         Gdx.app.log(TAG, "Dog collected");
     }
-    
+
     /**
      * When the main char and chicken collide.
      * Increase score and makes bone invisible
@@ -271,7 +281,7 @@ public class WorldController extends InputAdapter
         score += cat.getScore();
         Gdx.app.log(TAG, "Cat collected");
     }
-    
+
     /**
      * When the main char and chicken collide.
      * Increase score and makes bone invisible
@@ -283,7 +293,7 @@ public class WorldController extends InputAdapter
         score += chicken.getScore();
         Gdx.app.log(TAG, "Chicken collected");
     }
-    
+
     /**
      * When the main char and flame collide.
      * Increase score and makes bone invisible
@@ -449,6 +459,15 @@ public class WorldController extends InputAdapter
     public boolean isPlayerInWater()
     {
         return level.mainChar.position.y < -5;
+    }
+
+    /**
+     * Switch back and forth from game to menu
+     */
+    private void backToMenu()
+    {
+        // switch to menu screen
+        game.setScreen(new MenuScreen(game));
     }
 
 }

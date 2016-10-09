@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.woodgdx.game.Assets;
 import com.woodgdx.game.util.Constants;
+import com.woodgdx.game.util.CharacterSkin;
+import com.woodgdx.game.util.GamePreferences;
 
 /**
  * Mainchar object class
@@ -215,6 +217,10 @@ public class MainChar extends AbstractGameObject
     public void render(SpriteBatch batch)
     {
         TextureRegion reg = null;
+
+        // Apply Skin Color
+        batch.setColor(CharacterSkin.values()[GamePreferences.instance.charSkin].getColor());
+
         // Set special color when game object has a Dog Food power-up
         if (hasDogFoodPowerup)
         {

@@ -1,0 +1,90 @@
+
+canyonbunny.pack.png
+size: 512,256
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+arial-15
+  rotate: false
+  xy: 2, 106
+  size: 256, 128
+  orig: 256, 128
+  offset: 0, 0
+  index: -1
+bone
+  rotate: false
+  xy: 335, 186
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: -1
+cat_item
+  rotate: false
+  xy: 260, 173
+  size: 73, 61
+  orig: 73, 61
+  offset: 0, 0
+  index: -1
+chicken_item
+  rotate: false
+  xy: 236, 60
+  size: 41, 44
+  orig: 41, 44
+  offset: 0, 0
+  index: -1
+cloud_decoration
+  rotate: false
+  xy: 2, 19
+  size: 160, 85
+  orig: 160, 85
+  offset: 0, 0
+  index: -1
+dog_food_bowl
+  rotate: false
+  xy: 164, 6
+  size: 42, 33
+  orig: 42, 33
+  offset: 0, 0
+  index: -1
+dog_item
+  rotate: false
+  xy: 260, 130
+  size: 65, 41
+  orig: 65, 41
+  offset: 0, 0
+  index: -1
+flame
+  rotate: false
+  xy: 208, 7
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+ground
+  rotate: false
+  xy: 385, 194
+  size: 47, 40
+  orig: 47, 40
+  offset: 0, 0
+  index: -1
+main_character
+  rotate: false
+  xy: 164, 41
+  size: 70, 63
+  orig: 70, 63
+  offset: 0, 0
+  index: -1
+tree_decoration
+  rotate: false
+  xy: 2, 2
+  size: 104, 15
+  orig: 104, 15
+  offset: 0, 0
+  index: -1
+water_decoration
+  rotate: false
+  xy: 434, 195
+  size: 46, 39
+  orig: 46, 39
+  offset: 0, 0
+  index: -1
