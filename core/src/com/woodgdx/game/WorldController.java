@@ -43,6 +43,9 @@ public class WorldController extends InputAdapter
 
     private float timeLeftGameOverDelay;
 
+    //Tracks lives for GUI animation of lost life
+    public float livesVisual;
+
     /**
      * Initializes level
      */
@@ -73,6 +76,7 @@ public class WorldController extends InputAdapter
         Gdx.input.setInputProcessor(this);
         cameraHelper = new CameraHelper();
         lives = Constants.LIVES_START;
+        livesVisual = lives;
         timeLeftGameOverDelay = 0;
         initLevel();
     }
@@ -101,6 +105,7 @@ public class WorldController extends InputAdapter
      */
     public void update(float deltaTime)
     {
+        handleDebugInput(deltaTime);
         if (isGameOver())
         {
             timeLeftGameOverDelay -= deltaTime;
@@ -109,13 +114,11 @@ public class WorldController extends InputAdapter
         }
         else
         {
-            handleDebugInput(deltaTime);
+            handleInputGame(deltaTime);
         }
-        handleInputGame(deltaTime);
         level.update(deltaTime);
         testCollisions();
         cameraHelper.update(deltaTime);
-        //Takes away lives when fallen in water
         if (!isGameOver() && isPlayerInWater())
         {
             lives--;
@@ -124,6 +127,8 @@ public class WorldController extends InputAdapter
             else
                 initLevel();
         }
+        if (livesVisual > lives)
+            livesVisual = Math.max(lives, livesVisual - 1 * deltaTime);
     }
 
     /**

@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.Disposable;
 import com.woodgdx.game.util.Constants;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.woodgdx.game.util.GamePreferences;
+import com.badlogic.gdx.math.MathUtils;
 
 /**
  * Draws the world
@@ -78,6 +79,20 @@ public class WorldRenderer implements Disposable
                 batch.setColor(0.5f, 0.5f, 0.5f, 0.5f);
             batch.draw(Assets.instance.main_character.main_character, x + i * 50, y, 50, 50, 120, 100, 0.35f, -0.35f, 0);
             batch.setColor(1, 1, 1, 1);
+        }
+        if (worldController.lives>= 0
+                &&worldController.livesVisual>worldController.lives) {
+                int i = worldController.lives;
+                float alphaColor = Math.max(0, worldController.livesVisual
+                - worldController.lives - 0.5f);
+                float alphaScale = 0.35f * (2 + worldController.lives
+                - worldController.livesVisual) * 2;
+                float alphaRotate = -45 * alphaColor;
+                batch.setColor(1.0f, 0.7f, 0.7f, alphaColor);
+                batch.draw(Assets.instance.main_character.main_character,
+                x + i * 50, y, 50, 50, 120, 100, alphaScale, -alphaScale,
+                alphaRotate);
+                batch.setColor(1, 1, 1, 1);
         }
     }
 
