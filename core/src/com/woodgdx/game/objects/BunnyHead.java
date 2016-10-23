@@ -7,6 +7,8 @@ import com.woodgdx.game.Assets;
 import com.woodgdx.game.util.Constants;
 import com.woodgdx.game.util.CharacterSkin;
 import com.woodgdx.game.util.GamePreferences;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 
 /**
  * Bunny Head object class
@@ -22,6 +24,8 @@ public class BunnyHead extends AbstractGameObject
     private final float JUMP_TIME_MIN = 0.1f;
 
     private final float JUMP_TIME_OFFSET_FLYING = JUMP_TIME_MAX - 0.018f;
+
+    public ParticleEffect dustParticles = new ParticleEffect();
 
     public enum VIEW_DIRECTION
     {
@@ -84,6 +88,8 @@ public class BunnyHead extends AbstractGameObject
         // Power-ups
         hasFeatherPowerup = false;
         timeLeftFeatherPowerup = 0;
+        // Particles
+        dustParticles.load(Gdx.files.internal("../core/assets/particles/dust.pfx"), Gdx.files.internal("../core/assets/particles"));
     }
 
     /**
@@ -166,6 +172,7 @@ public class BunnyHead extends AbstractGameObject
                 setFeatherPowerup(false);
             }
         }
+        dustParticles.update(deltaTime);
     }
 
     /**
@@ -179,6 +186,11 @@ public class BunnyHead extends AbstractGameObject
         {
         case GROUNDED:
             jumpState = JUMP_STATE.FALLING;
+            if (velocity.x != 0)
+            {
+                dustParticles.setPosition(position.x + dimension.x / 2, position.y);
+                dustParticles.start();
+            }
             break;
         case JUMP_RISING:
             // Keep track of jump time
@@ -203,7 +215,10 @@ public class BunnyHead extends AbstractGameObject
             }
         }
         if (jumpState != JUMP_STATE.GROUNDED)
+        {
+            dustParticles.allowCompletion();
             super.updateMotionY(deltaTime);
+        }
     }
 
     /**
@@ -213,9 +228,11 @@ public class BunnyHead extends AbstractGameObject
     @Override
     public void render(SpriteBatch batch)
     {
+        TextureRegion reg = null;
+        // Draw Particles
+        dustParticles.draw(batch);
         // Apply Skin Color
         batch.setColor(CharacterSkin.values()[GamePreferences.instance.charSkin].getColor());
-        TextureRegion reg = null;
         // Set special color when game object has a feather power-up
         if (hasFeatherPowerup)
         {

@@ -42,14 +42,21 @@ public class WorldController extends InputAdapter
     //Instance of Game, switch between screens.
     private Game game;
 
+    //Tracks lives, but for GUI animation so its a little slower
+    public float livesVisual;
+
+    //For score gui animation
+    public float scoreVisual;
+
     /**
      * Initializes level
      */
     private void initLevel()
     {
         score = 0;
+        scoreVisual = score;
         level = new Level(Constants.LEVEL_01);
-        cameraHelper.setTarget(level.bunnyHead); //Camera follows bunny head
+        cameraHelper.setTarget(level.bunnyHead);
     }
 
     public CameraHelper cameraHelper;
@@ -72,6 +79,7 @@ public class WorldController extends InputAdapter
         Gdx.input.setInputProcessor(this);
         cameraHelper = new CameraHelper();
         lives = Constants.LIVES_START;
+        livesVisual = lives;
         timeLeftGameOverDelay = 0;
         initLevel();
     }
@@ -101,7 +109,6 @@ public class WorldController extends InputAdapter
     public void update(float deltaTime)
     {
         handleDebugInput(deltaTime);
-        //If the game is over
         if (isGameOver())
         {
             timeLeftGameOverDelay -= deltaTime;
@@ -115,7 +122,6 @@ public class WorldController extends InputAdapter
         level.update(deltaTime);
         testCollisions();
         cameraHelper.update(deltaTime);
-        //Takes away lives when fallen in water
         if (!isGameOver() && isPlayerInWater())
         {
             lives--;
@@ -124,6 +130,11 @@ public class WorldController extends InputAdapter
             else
                 initLevel();
         }
+        level.mountains.updateScrollPosition(cameraHelper.getPosition());
+        if (livesVisual > lives)
+            livesVisual = Math.max(lives, livesVisual - 1 * deltaTime);
+        if (scoreVisual < score)
+            scoreVisual = Math.min(score, scoreVisual + 250 * deltaTime);
     }
 
     /**

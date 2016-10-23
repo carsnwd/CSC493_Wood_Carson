@@ -9,6 +9,7 @@ import com.woodgdx.game.util.Constants;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.utils.Align;
 import com.woodgdx.game.util.GamePreferences;
+import com.badlogic.gdx.math.MathUtils;
 
 /**
  * Draws the world
@@ -60,8 +61,17 @@ public class WorldRenderer implements Disposable
     {
         float x = -15;
         float y = -15;
-        batch.draw(Assets.instance.goldCoin.goldCoin, x, y, 50, 50, 100, 100, 0.35f, -0.35f, 0);
-        Assets.instance.fonts.defaultBig.draw(batch, "" + worldController.score, x + 75, y + 37);
+        float offsetX = 50;
+        float offsetY = 50;
+        if (worldController.scoreVisual < worldController.score)
+        {
+            long shakeAlpha = System.currentTimeMillis() % 360;
+            float shakeDist = 1.5f;
+            offsetX += MathUtils.sinDeg(shakeAlpha * 2.2f) * shakeDist;
+            offsetY += MathUtils.sinDeg(shakeAlpha * 2.9f) * shakeDist;
+        }
+        batch.draw(Assets.instance.goldCoin.goldCoin, x, y, offsetX, offsetY, 100, 100, 0.35f, -0.35f, 0);
+        Assets.instance.fonts.defaultBig.draw(batch, "" + (int) worldController.scoreVisual, x + 75, y + 37);
     }
 
     /**
@@ -77,6 +87,17 @@ public class WorldRenderer implements Disposable
             if (worldController.lives <= i)
                 batch.setColor(0.5f, 0.5f, 0.5f, 0.5f);
             batch.draw(Assets.instance.bunny.head, x + i * 50, y, 50, 50, 120, 100, 0.35f, -0.35f, 0);
+            batch.setColor(1, 1, 1, 1);
+        }
+        //Bunny Head GUI animation 
+        if (worldController.lives >= 0 && worldController.livesVisual > worldController.lives)
+        {
+            int i = worldController.lives;
+            float alphaColor = Math.max(0, worldController.livesVisual - worldController.lives - 0.5f);
+            float alphaScale = 0.35f * (2 + worldController.lives - worldController.livesVisual) * 2;
+            float alphaRotate = -45 * alphaColor;
+            batch.setColor(1.0f, 0.7f, 0.7f, alphaColor);
+            batch.draw(Assets.instance.bunny.head, x + i * 50, y, 50, 50, 120, 100, alphaScale, -alphaScale, alphaRotate);
             batch.setColor(1, 1, 1, 1);
         }
     }

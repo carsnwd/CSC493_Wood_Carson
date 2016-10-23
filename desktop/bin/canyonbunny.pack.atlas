@@ -1,0 +1,159 @@
+
+canyonbunny.pack.png
+size: 1024,1024
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+background
+  rotate: false
+  xy: 2, 86
+  size: 801, 481
+  orig: 801, 481
+  offset: 0, 0
+  index: -1
+bunny_head
+  rotate: false
+  xy: 513, 2
+  size: 122, 82
+  orig: 122, 82
+  offset: 0, 0
+  index: -1
+cloud01
+  rotate: false
+  xy: 333, 6
+  size: 178, 78
+  orig: 178, 78
+  offset: 0, 0
+  index: -1
+cloud02
+  rotate: false
+  xy: 805, 479
+  size: 198, 88
+  orig: 198, 88
+  offset: 0, 0
+  index: -1
+cloud03
+  rotate: false
+  xy: 805, 392
+  size: 182, 85
+  orig: 182, 85
+  offset: 0, 0
+  index: -1
+info
+  rotate: false
+  xy: 2, 2
+  size: 329, 82
+  orig: 329, 82
+  offset: 0, 0
+  index: -1
+item_feather
+  rotate: false
+  xy: 695, 44
+  size: 46, 40
+  orig: 46, 40
+  offset: 0, 0
+  index: -1
+item_gold_coin
+  rotate: false
+  xy: 637, 28
+  size: 56, 56
+  orig: 56, 56
+  offset: 0, 0
+  index: -1
+mountain_left
+  rotate: false
+  xy: 2, 796
+  size: 1000, 225
+  orig: 1000, 225
+  offset: 0, 0
+  index: -1
+mountain_right
+  rotate: false
+  xy: 2, 569
+  size: 1000, 225
+  orig: 1000, 225
+  offset: 0, 0
+  index: -1
+rock_edge
+  rotate: false
+  xy: 893, 34
+  size: 63, 356
+  orig: 63, 356
+  offset: 0, 0
+  index: -1
+rock_middle
+  rotate: false
+  xy: 805, 34
+  size: 86, 356
+  orig: 86, 356
+  offset: 0, 0
+  index: -1
+water_overlay
+  rotate: false
+  xy: 958, 230
+  size: 32, 160
+  orig: 32, 160
+  offset: 0, 0
+  index: -1
+
+canyonbunny.pack2.png
+size: 1024,1024
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+arial-15
+  rotate: false
+  xy: 2, 2
+  size: 256, 128
+  orig: 256, 128
+  offset: 0, 0
+  index: -1
+bunny
+  rotate: false
+  xy: 2, 132
+  size: 269, 468
+  orig: 269, 468
+  offset: 0, 0
+  index: -1
+coins
+  rotate: false
+  xy: 2, 602
+  size: 510, 357
+  orig: 510, 357
+  offset: 0, 0
+  index: -1
+logo
+  rotate: false
+  xy: 514, 840
+  size: 340, 119
+  orig: 340, 119
+  offset: 0, 0
+  index: -1
+options-dn
+  rotate: false
+  xy: 273, 450
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
+options-up
+  rotate: false
+  xy: 514, 688
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
+play-dn
+  rotate: false
+  xy: 273, 298
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
+play-up
+  rotate: false
+  xy: 666, 688
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
