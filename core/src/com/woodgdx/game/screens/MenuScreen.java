@@ -25,6 +25,7 @@ import com.woodgdx.game.Assets;
 import com.woodgdx.game.util.Constants;
 import com.woodgdx.game.util.CharacterSkin;
 import com.woodgdx.game.util.GamePreferences;
+import com.woodgdx.game.util.AudioManager;
 
 /**
  * Menuscreen of our game.
@@ -347,17 +348,27 @@ public class MenuScreen extends AbstractGameScreen
         imgCharSkin.setColor(skin.getColor());
     }
 
+    /**
+     * When settings clicked
+     */
     private void onSaveClicked()
     {
         saveSettings();
         onCancelClicked();
+        //Stop music when settings opened
+        AudioManager.instance.onSettingsUpdated();
     }
 
+    /**
+     * When settings closed
+     */
     private void onCancelClicked()
     {
         btnMenuPlay.setVisible(true);
         btnMenuOptions.setVisible(true);
         winOptions.setVisible(false);
+        //Start music as settings close
+        AudioManager.instance.onSettingsUpdated();
     }
 
     /**

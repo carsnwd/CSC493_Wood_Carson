@@ -23,6 +23,7 @@ import com.woodgdx.game.objects.Rock;
 import com.badlogic.gdx.Game;
 import com.woodgdx.game.screens.MenuScreen;
 import com.woodgdx.game.util.GamePreferences;
+import com.woodgdx.game.util.AudioManager;
 
 public class WorldController extends InputAdapter
 {
@@ -124,6 +125,7 @@ public class WorldController extends InputAdapter
         cameraHelper.update(deltaTime);
         if (!isGameOver() && isPlayerInWater())
         {
+            AudioManager.instance.play(Assets.instance.sounds.liveLost);
             lives--;
             if (isGameOver())
                 timeLeftGameOverDelay = Constants.TIME_DELAY_GAME_OVER;
@@ -265,6 +267,7 @@ public class WorldController extends InputAdapter
     private void onCollisionBunnyWithGoldCoin(GoldCoin goldcoin)
     {
         goldcoin.collected = true;
+        AudioManager.instance.play(Assets.instance.sounds.pickupCoin);
         score += goldcoin.getScore();
         Gdx.app.log(TAG, "Gold coin collected");
     }
@@ -277,6 +280,7 @@ public class WorldController extends InputAdapter
     private void onCollisionBunnyWithFeather(Feather feather)
     {
         feather.collected = true;
+        AudioManager.instance.play(Assets.instance.sounds.pickupFeather);
         score += feather.getScore();
         level.bunnyHead.setFeatherPowerup(true);
         Gdx.app.log(TAG, "Feather collected");
