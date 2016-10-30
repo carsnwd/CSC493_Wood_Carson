@@ -26,6 +26,7 @@ import com.woodgdx.game.objects.Bone;
 import com.woodgdx.game.objects.Ground;
 import com.badlogic.gdx.Game;
 import com.woodgdx.game.screens.MenuScreen;
+import com.woodgdx.game.util.AudioManager;
 
 public class WorldController extends InputAdapter
 {
@@ -121,6 +122,7 @@ public class WorldController extends InputAdapter
         cameraHelper.update(deltaTime);
         if (!isGameOver() && isPlayerInWater())
         {
+            AudioManager.instance.play(Assets.instance.sounds.liveLost);
             lives--;
             if (isGameOver())
                 timeLeftGameOverDelay = Constants.TIME_DELAY_GAME_OVER;
@@ -259,6 +261,7 @@ public class WorldController extends InputAdapter
     private void onCollisionMainCharWithBone(Bone bone)
     {
         bone.collected = true;
+        AudioManager.instance.play(Assets.instance.sounds.pickupBone);
         score += bone.getScore();
         Gdx.app.log(TAG, "bone collected");
     }
@@ -271,6 +274,7 @@ public class WorldController extends InputAdapter
     private void onCollisionMainCharWithDog(Dog dog)
     {
         dog.collected = true;
+//        AudioManager.instance.play(Assets.instance.sounds.dogBark);
         score += dog.getScore();
         Gdx.app.log(TAG, "Dog collected");
     }
@@ -283,6 +287,7 @@ public class WorldController extends InputAdapter
     private void onCollisionMainCharWithCat(Cat cat)
     {
         cat.collected = true;
+//        AudioManager.instance.play(Assets.instance.sounds.catMeow);
         score += cat.getScore();
         Gdx.app.log(TAG, "Cat collected");
     }
@@ -295,6 +300,7 @@ public class WorldController extends InputAdapter
     private void onCollisionMainCharWithChicken(Chicken chicken)
     {
         chicken.collected = true;
+//        AudioManager.instance.play(Assets.instance.sounds.chicken);
         score += chicken.getScore();
         Gdx.app.log(TAG, "Chicken collected");
     }
@@ -307,6 +313,7 @@ public class WorldController extends InputAdapter
     private void onCollisionMainCharWithFlame(Flame flame)
     {
         flame.collected = true;
+        AudioManager.instance.play(Assets.instance.sounds.flame);
         score += flame.getScore();
         Gdx.app.log(TAG, "Flame collected");
     }
@@ -319,6 +326,7 @@ public class WorldController extends InputAdapter
     private void onCollisionMainCharWithDogFoodBowl(DogFoodBowl dogFoodBowl)
     {
         dogFoodBowl.collected = true;
+        AudioManager.instance.play(Assets.instance.sounds.pickupFoodBowl);
         score += dogFoodBowl.getScore();
         level.mainChar.setDogFoodPowerup(true);
         Gdx.app.log(TAG, "dogfoodbowl collected");

@@ -25,6 +25,7 @@ import com.woodgdx.game.Assets;
 import com.woodgdx.game.util.Constants;
 import com.woodgdx.game.util.CharacterSkin;
 import com.woodgdx.game.util.GamePreferences;
+import com.woodgdx.game.util.AudioManager;
 
 /**
  * Menuscreen of our game.
@@ -351,6 +352,7 @@ public class MenuScreen extends AbstractGameScreen
     {
         saveSettings();
         onCancelClicked();
+        AudioManager.instance.onSettingsUpdated();
     }
 
     private void onCancelClicked()
@@ -358,6 +360,7 @@ public class MenuScreen extends AbstractGameScreen
         btnMenuPlay.setVisible(true);
         btnMenuOptions.setVisible(true);
         winOptions.setVisible(false);
+        AudioManager.instance.onSettingsUpdated();
     }
 
     /**

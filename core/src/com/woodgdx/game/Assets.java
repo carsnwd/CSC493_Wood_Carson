@@ -11,6 +11,8 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 
 /**
  * Organizes and structures our assets
@@ -26,13 +28,20 @@ public class Assets implements Disposable, AssetErrorListener
 
     //Game assets 
     public AssetBone bone;
+
     public AssetCat cat_item;
+
     public AssetChicken chicken_item;
-//    public AssetCloud cloud;
+
+    //    public AssetCloud cloud;
     public AssetDogFoodBowl dog_food_bowl;
+
     public AssetDog dog_item;
+
     public AssetFlame flame;
+
     public AssetGround ground;
+
     public AssetMainCharacter main_character;
 
     public AssetLevelDecoration levelDecoration;
@@ -82,6 +91,18 @@ public class Assets implements Disposable, AssetErrorListener
         assetManager.setErrorListener(this);
         // load texture atlas
         assetManager.load(Constants.TEXTURE_ATLAS_OBJECTS, TextureAtlas.class);
+        // load sounds
+        assetManager.load("../core/assets/sounds/bone.wav", Sound.class);
+        assetManager.load("../core/assets/sounds/food_bowl.wav", Sound.class);
+        assetManager.load("../core/assets/sounds/jump.wav", Sound.class);
+        assetManager.load("../core/assets/sounds/jump_with_effect.wav", Sound.class);
+        assetManager.load("../core/assets/sounds/live_lost.wav", Sound.class);
+        assetManager.load("../core/assets/sounds/cat_meow.wav", Sound.class);
+        assetManager.load("../core/assets/sounds/dog_bark.wav", Sound.class);
+        assetManager.load("../core/assets/sounds/chicken.wav", Sound.class);
+        assetManager.load("../core/assets/sounds/flame.wav", Sound.class);
+        // load music
+        assetManager.load("../core/assets/music/heart_of_gold.mp3", Music.class);
         // start loading assets and wait until finished
         assetManager.finishLoading();
         Gdx.app.debug(TAG, "# of assets loaded: " + assetManager.getAssetNames().size);
@@ -101,13 +122,15 @@ public class Assets implements Disposable, AssetErrorListener
         bone = new AssetBone(atlas);
         cat_item = new AssetCat(atlas);
         chicken_item = new AssetChicken(atlas);
-//        cloud = new AssetCloud(atlas);
+        //        cloud = new AssetCloud(atlas);
         dog_food_bowl = new AssetDogFoodBowl(atlas);
         dog_item = new AssetDog(atlas);
         flame = new AssetFlame(atlas);
         ground = new AssetGround(atlas);
         main_character = new AssetMainCharacter(atlas);
         levelDecoration = new AssetLevelDecoration(atlas);
+        sounds = new AssetSounds(assetManager);
+        music = new AssetMusic(assetManager);
     }
 
     /**
@@ -142,7 +165,7 @@ public class Assets implements Disposable, AssetErrorListener
     {
         Gdx.app.error(TAG, "Couldn't load asset '" + asset.fileName + "'", (Exception) throwable);
     }
-    
+
     /**
      * Loads dog food bowl asset from textureatlas
      * @author carson
@@ -157,7 +180,7 @@ public class Assets implements Disposable, AssetErrorListener
             dogFoodBowl = atlas.findRegion("dog_food_bowl");
         }
     }
-    
+
     /**
      * Loads bone asset from textureatlas
      * @author carson
@@ -172,7 +195,6 @@ public class Assets implements Disposable, AssetErrorListener
             bone = atlas.findRegion("bone");
         }
     }
-
 
     /**
      * Loads cat asset from textureatlas
@@ -189,7 +211,6 @@ public class Assets implements Disposable, AssetErrorListener
         }
     }
 
-    
     /**
      * Loads chicken asset from textureatlas
      * @author carson
@@ -204,7 +225,7 @@ public class Assets implements Disposable, AssetErrorListener
             chicken_item = atlas.findRegion("chicken_item");
         }
     }
-    
+
     /**
      * Loads flame asset from textureatlas
      * @author carson
@@ -220,20 +241,20 @@ public class Assets implements Disposable, AssetErrorListener
         }
     }
 
-//    /**
-//     * Loads cloud asset from textureatlas
-//     * @author carson
-//     */
-//    public class AssetCloud
-//    {
-//        public final AtlasRegion cloud;
-//
-//        public AssetCloud(TextureAtlas atlas)
-//        {
-//            //Just file name no extension
-//            cloud = atlas.findRegion("cloud");
-//        }
-//    }
+    //    /**
+    //     * Loads cloud asset from textureatlas
+    //     * @author carson
+    //     */
+    //    public class AssetCloud
+    //    {
+    //        public final AtlasRegion cloud;
+    //
+    //        public AssetCloud(TextureAtlas atlas)
+    //        {
+    //            //Just file name no extension
+    //            cloud = atlas.findRegion("cloud");
+    //        }
+    //    }
 
     /**
      * Loads dog item asset from textureatlas
@@ -302,6 +323,66 @@ public class Assets implements Disposable, AssetErrorListener
             cloud_decoration = atlas.findRegion("cloud_decoration");
             water_decoration = atlas.findRegion("water_decoration");
             tree_decoration = atlas.findRegion("tree_decoration");
+        }
+    }
+
+    public AssetSounds sounds;
+
+    public AssetMusic music;
+
+    /**
+     * Manages the sound effects within the game.
+     * @author carson
+     *
+     */
+    public class AssetSounds
+    {
+        //Respective sounds for each effect.
+        public final Sound jump;
+
+        public final Sound jumpWithFoodBowl;
+
+        public final Sound pickupBone;
+
+        public final Sound pickupFoodBowl;
+
+        public final Sound liveLost;
+        
+//        public final Sound catMeow;
+//        
+//        public final Sound dogBark;
+//        
+//        public final Sound chicken;
+        
+        public final Sound flame;
+
+        public AssetSounds(AssetManager am)
+        {
+            jump = am.get("../core/assets/sounds/jump.wav", Sound.class);
+            jumpWithFoodBowl = am.get("../core/assets/sounds/jump_with_effect.wav", Sound.class);
+            pickupBone = am.get("../core/assets/sounds/bone.wav", Sound.class);
+            pickupFoodBowl = am.get("../core/assets/sounds/food_bowl.wav", Sound.class);
+            liveLost = am.get("../core/assets/sounds/live_lost.wav", Sound.class);
+//            catMeow = am.get("../core/assets/sounds/cat_meow.wav", Sound.class);
+//            dogBark = am.get("../core/assets/sounds/dog_bark.wav", Sound.class);
+//            chicken = am.get("../core/assets/sounds/chicken.wav", Sound.class);
+            flame = am.get("../core/assets/sounds/flame.wav", Sound.class);
+        }
+    }
+
+    /**
+     * Manages the music (loops in background) for the game.
+     * @author carson
+     *
+     */
+    public class AssetMusic
+    {
+        //We only have one song that loops.
+        public final Music song01;
+
+        public AssetMusic(AssetManager am)
+        {
+            song01 = am.get("../core/assets/music/heart_of_gold.mp3", Music.class);
         }
     }
 }
