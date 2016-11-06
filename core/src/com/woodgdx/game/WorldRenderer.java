@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.utils.Align;
 import com.woodgdx.game.util.GamePreferences;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 
 /**
  * Draws the world
@@ -25,6 +26,11 @@ public class WorldRenderer implements Disposable
     private SpriteBatch batch;
 
     private WorldController worldController;
+
+    //Draws degbug lines for box2d physics
+    private static final boolean DEBUG_DRAW_BOX2D_WORLD = false;
+
+    private Box2DDebugRenderer b2debugRenderer;
 
     /**
      * Constructor
@@ -51,6 +57,7 @@ public class WorldRenderer implements Disposable
         cameraGUI.position.set(0, 0, 0);
         cameraGUI.setToOrtho(true); // flip y-axis
         cameraGUI.update();
+        b2debugRenderer = new Box2DDebugRenderer();
     }
 
     /**
@@ -177,6 +184,10 @@ public class WorldRenderer implements Disposable
         batch.begin();
         worldController.level.render(batch);
         batch.end();
+        if (DEBUG_DRAW_BOX2D_WORLD) {
+            b2debugRenderer.render(worldController.b2world,
+            camera.combined);
+        }
     }
 
     /**

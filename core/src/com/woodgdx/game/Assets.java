@@ -47,7 +47,7 @@ public class Assets implements Disposable, AssetErrorListener
     private Assets()
     {
     }
-    
+
     /**
      * Initialize assetmanager
      * @param assetManager
@@ -91,7 +91,7 @@ public class Assets implements Disposable, AssetErrorListener
         sounds = new AssetSounds(assetManager);
         music = new AssetMusic(assetManager);
     }
-    
+
     /**
      * Dispose of assetmanager
      */
@@ -281,6 +281,10 @@ public class Assets implements Disposable, AssetErrorListener
 
         public final AtlasRegion waterOverlay;
 
+        public final AtlasRegion carrot;
+
+        public final AtlasRegion goal;
+
         /**
          * Finds items on texture atlas
          * @param atlas
@@ -292,7 +296,9 @@ public class Assets implements Disposable, AssetErrorListener
             cloud03 = atlas.findRegion("cloud03");
             mountainLeft = atlas.findRegion("mountain_left");
             mountainRight = atlas.findRegion("mountain_right");
+            goal = atlas.findRegion("goal");
             waterOverlay = atlas.findRegion("water_overlay");
+            carrot = atlas.findRegion("carrot");
         }
     }
 }

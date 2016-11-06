@@ -18,6 +18,13 @@ bunny_head
   orig: 122, 82
   offset: 0, 0
   index: -1
+carrot
+  rotate: false
+  xy: 695, 32
+  size: 20, 52
+  orig: 20, 52
+  offset: 0, 0
+  index: -1
 cloud01
   rotate: false
   xy: 333, 6
@@ -25,18 +32,11 @@ cloud01
   orig: 178, 78
   offset: 0, 0
   index: -1
-cloud02
+goal
   rotate: false
-  xy: 805, 479
-  size: 198, 88
-  orig: 198, 88
-  offset: 0, 0
-  index: -1
-cloud03
-  rotate: false
-  xy: 805, 392
-  size: 182, 85
-  orig: 182, 85
+  xy: 805, 372
+  size: 200, 195
+  orig: 200, 195
   offset: 0, 0
   index: -1
 info
@@ -48,7 +48,7 @@ info
   index: -1
 item_feather
   rotate: false
-  xy: 695, 44
+  xy: 717, 44
   size: 46, 40
   orig: 46, 40
   offset: 0, 0
@@ -76,21 +76,21 @@ mountain_right
   index: -1
 rock_edge
   rotate: false
-  xy: 893, 34
+  xy: 893, 14
   size: 63, 356
   orig: 63, 356
   offset: 0, 0
   index: -1
 rock_middle
   rotate: false
-  xy: 805, 34
+  xy: 805, 14
   size: 86, 356
   orig: 86, 356
   offset: 0, 0
   index: -1
 water_overlay
   rotate: false
-  xy: 958, 230
+  xy: 958, 210
   size: 32, 160
   orig: 32, 160
   offset: 0, 0
@@ -113,6 +113,20 @@ bunny
   xy: 2, 132
   size: 269, 468
   orig: 269, 468
+  offset: 0, 0
+  index: -1
+cloud02
+  rotate: false
+  xy: 514, 598
+  size: 198, 88
+  orig: 198, 88
+  offset: 0, 0
+  index: -1
+cloud03
+  rotate: false
+  xy: 273, 211
+  size: 182, 85
+  orig: 182, 85
   offset: 0, 0
   index: -1
 coins
