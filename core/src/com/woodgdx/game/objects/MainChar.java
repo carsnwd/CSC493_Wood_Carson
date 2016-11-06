@@ -112,6 +112,16 @@ public class MainChar extends AbstractGameObject
                 timeJumping = 0;
                 jumpState = JUMP_STATE.JUMP_RISING;
             }
+            else if (velocity.x != 0)
+            {
+                //Gdx.app.log(TAG, "starting particles");
+                dustParticles.setPosition(position.x + dimension.x / 2, position.y + 0.1f);
+                dustParticles.start();
+            }
+            else if (velocity.x == 0)
+            {
+                dustParticles.allowCompletion();
+            }
             break;
         case JUMP_RISING: // Rising in the air
             if (!jumpKeyPressed)
@@ -140,7 +150,7 @@ public class MainChar extends AbstractGameObject
         {
             timeLeftDogFoodPowerup = Constants.ITEM_DOGFOOD_POWERUP_DURATION;
             // Set physics values
-            terminalVelocity.set(6.0f, 8.0f);
+            //terminalVelocity.set(6.0f, 8.0f);
         }
     }
 
@@ -164,6 +174,14 @@ public class MainChar extends AbstractGameObject
     public void update(float deltaTime)
     {
         super.update(deltaTime);
+        updateMotionX(deltaTime);
+        updateMotionY(deltaTime);
+        if (body != null)
+        {
+            // Gdx.app.log(TAG, "velY: "+velocity.y+" state: "+jumpState);
+            body.setLinearVelocity(velocity);
+            position.set(body.getPosition());
+        }
         if (velocity.x != 0)
         {
             viewDirection = velocity.x < 0 ? VIEW_DIRECTION.LEFT : VIEW_DIRECTION.RIGHT;
@@ -208,21 +226,35 @@ public class MainChar extends AbstractGameObject
                 // Still jumping
                 velocity.y = terminalVelocity.y;
             }
+            else
+            {
+                jumpState = JUMP_STATE.JUMP_FALLING;
+            }
             break;
         case FALLING:
+            jumpState = JUMP_STATE.GROUNDED;
             break;
         case JUMP_FALLING:
-            // Add delta times to track jump time
-            timeJumping += deltaTime;
-            // Jump to minimal height if jump key was pressed too short
-            if (timeJumping > 0 && timeJumping <= JUMP_TIME_MIN)
-            {
-                // Still jumping
-                velocity.y = terminalVelocity.y;
-            }
+            //            // Add delta times to track jump time
+            //            timeJumping += deltaTime;
+            //            // Jump to minimal height if jump key was pressed too short
+            //            if (timeJumping > 0 && timeJumping <= JUMP_TIME_MIN)
+            //            {
+            //                // Still jumping
+            //                velocity.y = terminalVelocity.y;
+            //            }
+            //        }
+            //        if (jumpState != JUMP_STATE.GROUNDED)
+            //        {
+            //            dustParticles.allowCompletion();
+            //            super.updateMotionY(deltaTime);
+            //        }
+            velocity.y = -terminalVelocity.y;
+            break;
         }
         if (jumpState != JUMP_STATE.GROUNDED)
         {
+            //Gdx.app.log(TAG, "stoppinparticles");
             dustParticles.allowCompletion();
             super.updateMotionY(deltaTime);
         }

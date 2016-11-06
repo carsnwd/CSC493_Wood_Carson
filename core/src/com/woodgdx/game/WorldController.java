@@ -5,16 +5,25 @@ import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import com.woodgdx.game.util.CameraHelper;
+import com.woodgdx.game.util.CollisionHandler;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.woodgdx.game.objects.Ground;
 import com.woodgdx.game.util.Constants;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.World;
+import com.woodgdx.game.objects.AbstractGameObject;
 import com.woodgdx.game.objects.Cat;
 import com.woodgdx.game.objects.Chicken;
 import com.woodgdx.game.objects.Dog;
@@ -47,16 +56,12 @@ public class WorldController extends InputAdapter
     //Tracks lives for GUI animation of lost life
     public float livesVisual;
 
-    /**
-     * Initializes level
-     */
-    private void initLevel()
-    {
-        score = 0;
-        level = new Level(Constants.LEVEL_01);
-        cameraHelper.setTarget(level.mainChar);
-    }
+    //Objects to remove as they are collected
+    public Array<AbstractGameObject> objectsToRemove;
 
+    // Box2D Collisions
+    public World myWorld;
+    
     public CameraHelper cameraHelper;
 
     /**
@@ -67,6 +72,67 @@ public class WorldController extends InputAdapter
         this.game = game;
         init();
     }
+    
+    /**
+     * Initializes level
+     */
+    private void initLevel()
+    {
+        score = 0;
+        level = new Level(Constants.LEVEL_01);
+        cameraHelper.setTarget(level.mainChar);
+        initPhysics();
+    }
+
+    private void initPhysics()
+    {
+        if (myWorld != null)
+            myWorld.dispose();
+        myWorld = new World(new Vector2(0, -9.81f), true);
+        myWorld.setContactListener(new CollisionHandler(this));
+        Vector2 origin = new Vector2();
+        for (Ground pieceOfGround : level.rocks)
+        {
+            BodyDef bodyDef = new BodyDef();
+            bodyDef.position.set(pieceOfGround.position);
+            bodyDef.type = BodyType.KinematicBody;
+            Body body = myWorld.createBody(bodyDef);
+            //body.setType(BodyType.DynamicBody);
+            body.setUserData(pieceOfGround);
+            pieceOfGround.body = body;
+            PolygonShape polygonShape = new PolygonShape();
+            origin.x = pieceOfGround.bounds.width / 2.0f;
+            origin.y = pieceOfGround.bounds.height / 2.0f;
+            polygonShape.setAsBox(pieceOfGround.bounds.width / 2.0f, (pieceOfGround.bounds.height - 0.04f) / 2.0f, origin, 0);
+            FixtureDef fixtureDef = new FixtureDef();
+            fixtureDef.shape = polygonShape;
+            body.createFixture(fixtureDef);
+            polygonShape.dispose();
+        }
+
+        // For PLayer
+        MainChar player = level.mainChar;
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.position.set(player.position);
+        bodyDef.fixedRotation = true;
+
+        Body body = myWorld.createBody(bodyDef);
+        body.setType(BodyType.DynamicBody);
+        body.setGravityScale(0.0f);
+        body.setUserData(player);
+        player.body = body;
+
+        PolygonShape polygonShape = new PolygonShape();
+        origin.x = (player.bounds.width) / 2.0f;
+        origin.y = (player.bounds.height) / 2.0f;
+        polygonShape.setAsBox((player.bounds.width - 0.7f) / 2.0f, (player.bounds.height - 0.15f) / 2.0f, origin, 0);
+
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = polygonShape;
+        // fixtureDef.friction = 0.5f;
+        body.createFixture(fixtureDef);
+        polygonShape.dispose();
+    }
 
     /**
      * Basically the constructors
@@ -74,6 +140,7 @@ public class WorldController extends InputAdapter
     // Outside of constructor so we don't reset the object too much.
     private void init()
     {
+        objectsToRemove = new Array<AbstractGameObject>();
         Gdx.input.setInputProcessor(this);
         cameraHelper = new CameraHelper();
         lives = Constants.LIVES_START;
@@ -106,6 +173,64 @@ public class WorldController extends InputAdapter
      */
     public void update(float deltaTime)
     {
+        //Box2D way of removing objects
+        if (objectsToRemove.size > 0)
+        {
+            for (AbstractGameObject obj : objectsToRemove)
+            {
+                if (obj instanceof Bone)
+                {
+                    int index = level.bones.indexOf((Bone) obj, true);
+                    if (index != -1)
+                    {
+                        level.bones.removeIndex(index);
+                        myWorld.destroyBody(obj.body);
+                    }
+                }else if(obj instanceof Cat)
+                {
+                    int index = level.cats.indexOf((Cat) obj, true);
+                    if (index != -1)
+                    {
+                        level.cats.removeIndex(index);
+                        myWorld.destroyBody(obj.body);
+                    }
+                }else if(obj instanceof Dog)
+                {
+                    int index = level.dogs.indexOf((Dog) obj, true);
+                    if (index != -1)
+                    {
+                        level.dogs.removeIndex(index);
+                        myWorld.destroyBody(obj.body);
+                    }
+                }else if(obj instanceof Chicken)
+                {
+                    int index = level.chickens.indexOf((Chicken) obj, true);
+                    if (index != -1)
+                    {
+                        level.chickens.removeIndex(index);
+                        myWorld.destroyBody(obj.body);
+                    }
+                }else if(obj instanceof DogFoodBowl)
+                {
+                    int index = level.dogFoodBowls.indexOf((DogFoodBowl) obj, true);
+                    if (index != -1)
+                    {
+                        level.dogFoodBowls.removeIndex(index);
+                        myWorld.destroyBody(obj.body);
+                    }
+                }else if(obj instanceof Flame)
+                {
+                    int index = level.flames.indexOf((Flame) obj, true);
+                    if (index != -1)
+                    {
+                        level.flames.removeIndex(index);
+                        myWorld.destroyBody(obj.body);
+                    }
+                }
+            }
+            objectsToRemove.removeRange(0, objectsToRemove.size - 1);
+        }
+        
         handleDebugInput(deltaTime);
         if (isGameOver())
         {
@@ -131,6 +256,10 @@ public class WorldController extends InputAdapter
         }
         if (livesVisual > lives)
             livesVisual = Math.max(lives, livesVisual - 1 * deltaTime);
+
+        myWorld.step(deltaTime, 8, 3);  // Tell the Box2D world to update.
+        level.update(deltaTime);
+        checkForCollisions();
     }
 
     /**
@@ -274,7 +403,7 @@ public class WorldController extends InputAdapter
     private void onCollisionMainCharWithDog(Dog dog)
     {
         dog.collected = true;
-//        AudioManager.instance.play(Assets.instance.sounds.dogBark);
+        //        AudioManager.instance.play(Assets.instance.sounds.dogBark);
         score += dog.getScore();
         Gdx.app.log(TAG, "Dog collected");
     }
@@ -287,7 +416,7 @@ public class WorldController extends InputAdapter
     private void onCollisionMainCharWithCat(Cat cat)
     {
         cat.collected = true;
-//        AudioManager.instance.play(Assets.instance.sounds.catMeow);
+        //        AudioManager.instance.play(Assets.instance.sounds.catMeow);
         score += cat.getScore();
         Gdx.app.log(TAG, "Cat collected");
     }
@@ -300,7 +429,7 @@ public class WorldController extends InputAdapter
     private void onCollisionMainCharWithChicken(Chicken chicken)
     {
         chicken.collected = true;
-//        AudioManager.instance.play(Assets.instance.sounds.chicken);
+        //        AudioManager.instance.play(Assets.instance.sounds.chicken);
         score += chicken.getScore();
         Gdx.app.log(TAG, "Chicken collected");
     }
@@ -425,6 +554,7 @@ public class WorldController extends InputAdapter
     {
         if (cameraHelper.hasTarget(level.mainChar))
         {
+            MainChar mainChar = level.mainChar;
             // Player Movement
             if (Gdx.input.isKeyPressed(Keys.LEFT))
             {
@@ -482,5 +612,30 @@ public class WorldController extends InputAdapter
         // switch to menu screen
         game.setScreen(new MenuScreen(game));
     }
+
+    /**
+     * Removes objects when collected
+     * @param obj
+     */
+    public void flagForRemoval(AbstractGameObject obj)
+    {
+        objectsToRemove.add(obj);
+    }
+    
+    /**
+     * Checks for collisions with Box2D
+     */
+    private void checkForCollisions()
+    {
+        r1.set(level.mainChar.position.x, level.mainChar.position.y, level.mainChar.bounds.width, level.mainChar.bounds.height);
+
+        for (Ground g : level.rocks)
+        {
+            r2.set(g.position.x, g.position.y, g.bounds.width, g.bounds.height);
+            if (!r1.overlaps(r2)) continue;
+            onCollisionmaincharWithRock(g);
+        }
+    }
+
 
 }

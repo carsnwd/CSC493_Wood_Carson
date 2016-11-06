@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.physics.box2d.Body;
 
 /**
  * Abstract game object, abstract class for
@@ -38,6 +39,9 @@ public abstract class AbstractGameObject
 
     //Physical box surrounding the object for collision purposes
     public Rectangle bounds;
+
+    // Box2D Physics
+    public Body body;
 
     public AbstractGameObject()
     {
@@ -106,11 +110,19 @@ public abstract class AbstractGameObject
 
     public void update(float deltaTime)
     {
-        updateMotionX(deltaTime);
-        updateMotionY(deltaTime);
-        // Move to new position
-        position.x += velocity.x * deltaTime;
-        position.y += velocity.y * deltaTime;
+        if (body == null) //Use custom made physics
+        {
+            updateMotionX(deltaTime);
+            updateMotionY(deltaTime);
+            // Move to new position
+            position.x += velocity.x * deltaTime;
+            position.y += velocity.y * deltaTime;
+        }
+        else //Use Box2D physics
+        {
+            position.set(body.getPosition());
+            rotation = body.getAngle() * MathUtils.radiansToDegrees;
+        }
     }
 
     public abstract void render(SpriteBatch batch);

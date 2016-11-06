@@ -10,6 +10,7 @@ import com.woodgdx.game.util.Constants;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.woodgdx.game.util.GamePreferences;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 
 /**
  * Draws the world
@@ -25,6 +26,11 @@ public class WorldRenderer implements Disposable
     private SpriteBatch batch;
 
     private WorldController worldController;
+
+    // For Box2D Debugging
+    private static final boolean DEBUG_DRAW_BOX2D_WORLD = true;
+
+    private Box2DDebugRenderer b2DebugRenderer;
 
     /**
      * Constructor
@@ -51,6 +57,7 @@ public class WorldRenderer implements Disposable
         cameraGUI.position.set(0, 0, 0);
         cameraGUI.setToOrtho(true); // flip y-axis
         cameraGUI.update();
+        b2DebugRenderer = new Box2DDebugRenderer();
     }
 
     /**
@@ -80,19 +87,15 @@ public class WorldRenderer implements Disposable
             batch.draw(Assets.instance.main_character.main_character, x + i * 50, y, 50, 50, 120, 100, 0.35f, -0.35f, 0);
             batch.setColor(1, 1, 1, 1);
         }
-        if (worldController.lives>= 0
-                &&worldController.livesVisual>worldController.lives) {
-                int i = worldController.lives;
-                float alphaColor = Math.max(0, worldController.livesVisual
-                - worldController.lives - 0.5f);
-                float alphaScale = 0.35f * (2 + worldController.lives
-                - worldController.livesVisual) * 2;
-                float alphaRotate = -45 * alphaColor;
-                batch.setColor(1.0f, 0.7f, 0.7f, alphaColor);
-                batch.draw(Assets.instance.main_character.main_character,
-                x + i * 50, y, 50, 50, 120, 100, alphaScale, -alphaScale,
-                alphaRotate);
-                batch.setColor(1, 1, 1, 1);
+        if (worldController.lives >= 0 && worldController.livesVisual > worldController.lives)
+        {
+            int i = worldController.lives;
+            float alphaColor = Math.max(0, worldController.livesVisual - worldController.lives - 0.5f);
+            float alphaScale = 0.35f * (2 + worldController.lives - worldController.livesVisual) * 2;
+            float alphaRotate = -45 * alphaColor;
+            batch.setColor(1.0f, 0.7f, 0.7f, alphaColor);
+            batch.draw(Assets.instance.main_character.main_character, x + i * 50, y, 50, 50, 120, 100, alphaScale, -alphaScale, alphaRotate);
+            batch.setColor(1, 1, 1, 1);
         }
     }
 
@@ -218,6 +221,11 @@ public class WorldRenderer implements Disposable
         batch.begin();
         worldController.level.render(batch);
         batch.end();
+        
+        if (DEBUG_DRAW_BOX2D_WORLD)
+        {
+            b2DebugRenderer.render(worldController.myWorld, camera.combined);
+        }
     }
 
     /**
