@@ -1,5 +1,6 @@
 package com.woodgdx.game.objects;
 
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Rectangle;
@@ -42,6 +43,11 @@ public abstract class AbstractGameObject
 
     // Box2D Physics
     public Body body;
+    
+    //Animation variables
+    public float stateTime;
+
+    public Animation animation;
 
     public AbstractGameObject()
     {
@@ -110,6 +116,7 @@ public abstract class AbstractGameObject
 
     public void update(float deltaTime)
     {
+        stateTime += deltaTime;
         if (body == null) //Use custom made physics
         {
             updateMotionX(deltaTime);
@@ -123,6 +130,16 @@ public abstract class AbstractGameObject
             position.set(body.getPosition());
             rotation = body.getAngle() * MathUtils.radiansToDegrees;
         }
+    }
+    
+    /**
+     * Sets animation for objects
+     * @param animation
+     */
+    public void setAnimation(Animation animation)
+    {
+        this.animation = animation;
+        stateTime = 0;
     }
 
     public abstract void render(SpriteBatch batch);

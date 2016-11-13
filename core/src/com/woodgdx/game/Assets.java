@@ -4,7 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetErrorListener;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.woodgdx.game.util.Constants;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
@@ -189,10 +191,19 @@ public class Assets implements Disposable, AssetErrorListener
     {
         public final AtlasRegion bone;
 
+        public final Animation animBone;
+
         public AssetBone(TextureAtlas atlas)
         {
             //Just file name no extension
             bone = atlas.findRegion("bone");
+
+            // Animation: Bone
+            Array<AtlasRegion> regions = atlas.findRegions("anim_bone");
+            AtlasRegion region = regions.first();
+            for (int i = 0; i < 10; i++)
+                regions.insert(0, region);
+            animBone = new Animation(1.0f / 20.0f, regions, Animation.PlayMode.LOOP_PINGPONG);
         }
     }
 
@@ -347,13 +358,13 @@ public class Assets implements Disposable, AssetErrorListener
         public final Sound pickupFoodBowl;
 
         public final Sound liveLost;
-        
-//        public final Sound catMeow;
-//        
-//        public final Sound dogBark;
-//        
-//        public final Sound chicken;
-        
+
+        //        public final Sound catMeow;
+        //        
+        //        public final Sound dogBark;
+        //        
+        //        public final Sound chicken;
+
         public final Sound flame;
 
         public AssetSounds(AssetManager am)
@@ -363,9 +374,9 @@ public class Assets implements Disposable, AssetErrorListener
             pickupBone = am.get("../core/assets/sounds/bone.wav", Sound.class);
             pickupFoodBowl = am.get("../core/assets/sounds/food_bowl.wav", Sound.class);
             liveLost = am.get("../core/assets/sounds/live_lost.wav", Sound.class);
-//            catMeow = am.get("../core/assets/sounds/cat_meow.wav", Sound.class);
-//            dogBark = am.get("../core/assets/sounds/dog_bark.wav", Sound.class);
-//            chicken = am.get("../core/assets/sounds/chicken.wav", Sound.class);
+            //            catMeow = am.get("../core/assets/sounds/cat_meow.wav", Sound.class);
+            //            dogBark = am.get("../core/assets/sounds/dog_bark.wav", Sound.class);
+            //            chicken = am.get("../core/assets/sounds/chicken.wav", Sound.class);
             flame = am.get("../core/assets/sounds/flame.wav", Sound.class);
         }
     }
