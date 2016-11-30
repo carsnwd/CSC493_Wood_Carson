@@ -323,7 +323,7 @@ public class Assets implements Disposable, AssetErrorListener
 
         public final AtlasRegion water_decoration;
 
-        public final AtlasRegion tree_decoration;
+        public final AtlasRegion background;
 
         /**
          * Finds items on texture atlas
@@ -333,7 +333,7 @@ public class Assets implements Disposable, AssetErrorListener
         {
             cloud_decoration = atlas.findRegion("cloud_decoration");
             water_decoration = atlas.findRegion("water_decoration");
-            tree_decoration = atlas.findRegion("tree_decoration");
+            background = atlas.findRegion("level1_background");
         }
     }
 

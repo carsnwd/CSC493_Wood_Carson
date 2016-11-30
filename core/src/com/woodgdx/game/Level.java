@@ -10,7 +10,7 @@ import com.woodgdx.game.objects.Chicken;
 import com.woodgdx.game.objects.Cloud_Decoration;
 import com.woodgdx.game.objects.Dog;
 import com.woodgdx.game.objects.Flame;
-import com.woodgdx.game.objects.Tree_Decoration;
+import com.woodgdx.game.objects.Background_Decoration;
 import com.woodgdx.game.objects.Ground;
 import com.woodgdx.game.objects.Water_Decoration;
 import com.woodgdx.game.objects.MainChar;
@@ -93,7 +93,7 @@ public class Level
     // decoration
     public Cloud_Decoration clouds;
 
-    public Tree_Decoration trees;
+    public Background_Decoration background;
 
     public Water_Decoration waterOverlay;
 
@@ -229,8 +229,8 @@ public class Level
         // decoration
         clouds = new Cloud_Decoration(pixmap.getWidth());
         clouds.position.set(0, 2);
-        trees = new Tree_Decoration(pixmap.getWidth());
-        trees.position.set(-1, -1);
+        background = new Background_Decoration(pixmap.getWidth());
+        background.position.set(-1, -1);
         waterOverlay = new Water_Decoration(pixmap.getWidth());
         waterOverlay.position.set(0, -3.75f);
         // free memory
@@ -246,7 +246,7 @@ public class Level
     public void render(SpriteBatch batch)
     {
         // Draw Mountains
-        trees.render(batch);
+        background.render(batch);
         // Draw Rocks
         for (Ground rock : rocks)
             rock.render(batch);
