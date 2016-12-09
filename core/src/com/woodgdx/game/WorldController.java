@@ -1,5 +1,12 @@
 package com.woodgdx.game;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
@@ -235,8 +242,18 @@ public class WorldController extends InputAdapter
         if (isGameOver())
         {
             timeLeftGameOverDelay -= deltaTime;
-            if (timeLeftGameOverDelay < 0)
+            if (timeLeftGameOverDelay < 0){
+                try
+                {
+                    recordScore();
+                }
+                catch (IOException e)
+                {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
                 backToMenu();
+            }
         }
         else
         {
@@ -620,6 +637,17 @@ public class WorldController extends InputAdapter
     public void flagForRemoval(AbstractGameObject obj)
     {
         objectsToRemove.add(obj);
+    }
+    
+    /**
+     * Records the high score.
+     * @throws IOException 
+     */
+    public void recordScore() throws IOException{
+        File highScoreFile = new File("score.txt");
+        FileWriter fw = new FileWriter(highScoreFile, true);
+        fw.write(score + "" +"\n");
+        fw.close();
     }
     
     /**
