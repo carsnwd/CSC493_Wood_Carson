@@ -1,11 +1,15 @@
 package com.woodgdx.game;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
@@ -648,6 +652,23 @@ public class WorldController extends InputAdapter
         FileWriter fw = new FileWriter(highScoreFile, true);
         fw.write(score + "" +"\n");
         fw.close();
+        
+        ArrayList<String> rows = new ArrayList<String>();
+        BufferedReader reader = new BufferedReader(new FileReader("score.txt"));
+
+        String s;
+        while((s = reader.readLine())!=null)
+            rows.add(s);
+
+        Collections.sort(rows);
+        Collections.reverse(rows);
+
+        FileWriter writer = new FileWriter("score.txt");
+        for(String cur: rows)
+            writer.write(cur+"\n");
+
+        reader.close();
+        writer.close();
     }
     
     /**
