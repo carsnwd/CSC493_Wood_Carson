@@ -117,10 +117,12 @@ public class MainChar extends AbstractGameObject
                 //Gdx.app.log(TAG, "starting particles");
                 dustParticles.setPosition(position.x + dimension.x / 2, position.y + 0.1f);
                 dustParticles.start();
+                jumpState = JUMP_STATE.JUMP_FALLING;
             }
             else if (velocity.x == 0)
             {
                 dustParticles.allowCompletion();
+                //jumpState = JUMP_STATE.JUMP_FALLING;
             }
             break;
         case JUMP_RISING: // Rising in the air
