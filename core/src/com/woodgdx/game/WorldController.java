@@ -52,6 +52,12 @@ public class WorldController extends InputAdapter
 {
     private static final String TAG = WorldController.class.getName();
 
+    private static final int TOTAL_BONES = 10;
+
+    private int boneCount = 0;
+
+    private String currentLevel = Constants.LEVEL_01;
+
     public Level level;
 
     private Game game;
@@ -72,7 +78,7 @@ public class WorldController extends InputAdapter
 
     // Box2D Collisions
     public World myWorld;
-    
+
     public CameraHelper cameraHelper;
 
     /**
@@ -83,14 +89,14 @@ public class WorldController extends InputAdapter
         this.game = game;
         init();
     }
-    
+
     /**
      * Initializes level
      */
     private void initLevel()
     {
         score = 0;
-        level = new Level(Constants.LEVEL_01);
+        level = new Level(currentLevel);
         cameraHelper.setTarget(level.mainChar);
         initPhysics();
     }
@@ -197,7 +203,8 @@ public class WorldController extends InputAdapter
                         level.bones.removeIndex(index);
                         myWorld.destroyBody(obj.body);
                     }
-                }else if(obj instanceof Cat)
+                }
+                else if (obj instanceof Cat)
                 {
                     int index = level.cats.indexOf((Cat) obj, true);
                     if (index != -1)
@@ -205,7 +212,8 @@ public class WorldController extends InputAdapter
                         level.cats.removeIndex(index);
                         myWorld.destroyBody(obj.body);
                     }
-                }else if(obj instanceof Dog)
+                }
+                else if (obj instanceof Dog)
                 {
                     int index = level.dogs.indexOf((Dog) obj, true);
                     if (index != -1)
@@ -213,7 +221,8 @@ public class WorldController extends InputAdapter
                         level.dogs.removeIndex(index);
                         myWorld.destroyBody(obj.body);
                     }
-                }else if(obj instanceof Chicken)
+                }
+                else if (obj instanceof Chicken)
                 {
                     int index = level.chickens.indexOf((Chicken) obj, true);
                     if (index != -1)
@@ -221,7 +230,8 @@ public class WorldController extends InputAdapter
                         level.chickens.removeIndex(index);
                         myWorld.destroyBody(obj.body);
                     }
-                }else if(obj instanceof DogFoodBowl)
+                }
+                else if (obj instanceof DogFoodBowl)
                 {
                     int index = level.dogFoodBowls.indexOf((DogFoodBowl) obj, true);
                     if (index != -1)
@@ -229,7 +239,8 @@ public class WorldController extends InputAdapter
                         level.dogFoodBowls.removeIndex(index);
                         myWorld.destroyBody(obj.body);
                     }
-                }else if(obj instanceof Flame)
+                }
+                else if (obj instanceof Flame)
                 {
                     int index = level.flames.indexOf((Flame) obj, true);
                     if (index != -1)
@@ -241,12 +252,13 @@ public class WorldController extends InputAdapter
             }
             objectsToRemove.removeRange(0, objectsToRemove.size - 1);
         }
-        
+
         handleDebugInput(deltaTime);
         if (isGameOver())
         {
             timeLeftGameOverDelay -= deltaTime;
-            if (timeLeftGameOverDelay < 0){
+            if (timeLeftGameOverDelay < 0)
+            {
                 try
                 {
                     recordScore();
@@ -278,7 +290,7 @@ public class WorldController extends InputAdapter
         if (livesVisual > lives)
             livesVisual = Math.max(lives, livesVisual - 1 * deltaTime);
 
-        myWorld.step(deltaTime, 8, 3);  // Tell the Box2D world to update.
+        myWorld.step(deltaTime, 8, 3); // Tell the Box2D world to update.
         level.update(deltaTime);
         checkForCollisions();
     }
@@ -414,6 +426,48 @@ public class WorldController extends InputAdapter
         AudioManager.instance.play(Assets.instance.sounds.pickupBone);
         score += bone.getScore();
         Gdx.app.log(TAG, "bone collected");
+        if (bone.collected)
+        {
+            Gdx.app.log(TAG, "boneCount: " + this.boneCount);
+            Gdx.app.log(TAG, "TOTAL BONES: " + this.TOTAL_BONES);
+            if (this.boneCount == TOTAL_BONES)
+            {
+                this.boneCount = 0;
+                if (this.currentLevel.equals(Constants.LEVEL_01))
+                {
+                    try
+                    {
+                        recordScore();
+                    }
+                    catch (IOException e)
+                    {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    this.currentLevel = Constants.LEVEL_02;
+                    initLevel();
+                }
+                else
+                {
+                    try
+                    {
+                        recordScore();
+                    }
+                    catch (IOException e)
+                    {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    backToMenu();
+                }
+            }
+            else
+            {
+                //Gdx.app.log(TAG, "boneCount: " + this.boneCount);
+                // Gdx.app.log(TAG, "boneCount: " + this.TOTAL_BONES);
+                this.boneCount++;
+            }
+        }
     }
 
     /**
@@ -502,7 +556,9 @@ public class WorldController extends InputAdapter
         for (Bone bone : level.bones)
         {
             if (bone.collected)
+            {
                 continue;
+            }
             r2.set(bone.position.x, bone.position.y, bone.bounds.width, bone.bounds.height);
             if (!r1.overlaps(r2))
                 continue;
@@ -642,35 +698,36 @@ public class WorldController extends InputAdapter
     {
         objectsToRemove.add(obj);
     }
-    
+
     /**
      * Records the high score.
      * @throws IOException 
      */
-    public void recordScore() throws IOException{
+    public void recordScore() throws IOException
+    {
         File highScoreFile = new File("score.txt");
         FileWriter fw = new FileWriter(highScoreFile, true);
-        fw.write(score + "" +"\n");
+        fw.write(score + "" + "\n");
         fw.close();
-        
+
         ArrayList<String> rows = new ArrayList<String>();
         BufferedReader reader = new BufferedReader(new FileReader("score.txt"));
 
         String s;
-        while((s = reader.readLine())!=null)
+        while ((s = reader.readLine()) != null)
             rows.add(s);
 
         Collections.sort(rows);
         Collections.reverse(rows);
 
         FileWriter writer = new FileWriter("score.txt");
-        for(String cur: rows)
-            writer.write(cur+"\n");
+        for (String cur : rows)
+            writer.write(cur + "\n");
 
         reader.close();
         writer.close();
     }
-    
+
     /**
      * Checks for collisions with Box2D
      */
@@ -681,10 +738,9 @@ public class WorldController extends InputAdapter
         for (Ground g : level.rocks)
         {
             r2.set(g.position.x, g.position.y, g.bounds.width, g.bounds.height);
-            if (!r1.overlaps(r2)) continue;
+            if (!r1.overlaps(r2))
+                continue;
             onCollisionmaincharWithRock(g);
         }
     }
-
-
 }
