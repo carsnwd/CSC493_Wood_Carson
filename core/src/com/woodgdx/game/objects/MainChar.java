@@ -28,6 +28,7 @@ public class MainChar extends AbstractGameObject
     private final float JUMP_TIME_OFFSET_FLYING = JUMP_TIME_MAX - 0.018f;
 
     public ParticleEffect dustParticles = new ParticleEffect();
+    public ParticleEffect flameParticles = new ParticleEffect();
 
     public enum VIEW_DIRECTION
     {
@@ -92,6 +93,8 @@ public class MainChar extends AbstractGameObject
         timeLeftDogFoodPowerup = 0;
         // Particles
         dustParticles.load(Gdx.files.internal("../core/assets/particles/dust.pfx"), Gdx.files.internal("../core/assets/particles"));
+        flameParticles.load(Gdx.files.internal("../core/assets/particles/flame.pfx"), Gdx.files.internal("../core/assets/particles"));
+
     }
 
     /**
@@ -115,14 +118,25 @@ public class MainChar extends AbstractGameObject
             else if (velocity.x != 0)
             {
                 //Gdx.app.log(TAG, "starting particles");
-                dustParticles.setPosition(position.x + dimension.x / 2, position.y + 0.1f);
-                dustParticles.start();
+                if(hasDogFoodPowerup)
+                {
+                    flameParticles.setPosition(position.x + dimension.x / 2, position.y + 0.1f);
+                    flameParticles.start();
+                }else
+                {
+                    dustParticles.setPosition(position.x + dimension.x / 2, position.y + 0.1f);
+                    dustParticles.start();
+                }
                 jumpState = JUMP_STATE.JUMP_FALLING;
             }
             else if (velocity.x == 0)
             {
-                dustParticles.allowCompletion();
-                //jumpState = JUMP_STATE.JUMP_FALLING;
+                if(hasDogFoodPowerup){
+                    flameParticles.allowCompletion();
+                }else{
+                    dustParticles.allowCompletion();
+                }
+                jumpState = JUMP_STATE.JUMP_FALLING;
             }
             break;
         case JUMP_RISING: // Rising in the air
@@ -199,7 +213,11 @@ public class MainChar extends AbstractGameObject
                 terminalVelocity.set(3.0f, 4.0f);
             }
         }
-        dustParticles.update(deltaTime);
+        if(hasDogFoodPowerup){
+            flameParticles.update(deltaTime);
+        }else{
+            dustParticles.update(deltaTime);
+        }
     }
 
     /**
@@ -215,8 +233,13 @@ public class MainChar extends AbstractGameObject
             jumpState = JUMP_STATE.FALLING;
             if (velocity.x != 0)
             {
-                dustParticles.setPosition(position.x + dimension.x / 2, position.y);
-                dustParticles.start();
+                if(hasDogFoodPowerup){
+                    flameParticles.setPosition(position.x + dimension.x / 2, position.y);
+                    flameParticles.start();
+                }else{
+                    dustParticles.setPosition(position.x + dimension.x / 2, position.y);
+                    dustParticles.start();
+                }
             }
             break;
         case JUMP_RISING:
@@ -257,7 +280,11 @@ public class MainChar extends AbstractGameObject
         if (jumpState != JUMP_STATE.GROUNDED)
         {
             //Gdx.app.log(TAG, "stoppinparticles");
-            dustParticles.allowCompletion();
+            if(hasDogFoodPowerup){
+                flameParticles.allowCompletion();
+            }else{
+                dustParticles.allowCompletion();
+            }
             super.updateMotionY(deltaTime);
         }
     }
@@ -271,7 +298,11 @@ public class MainChar extends AbstractGameObject
     {
         TextureRegion reg = null;
         // Draw Particles
-        dustParticles.draw(batch);
+        if(hasDogFoodPowerup){
+            flameParticles.draw(batch);
+        }else{
+            dustParticles.draw(batch);
+        }
 
         // Apply Skin Color
         batch.setColor(CharacterSkin.values()[GamePreferences.instance.charSkin].getColor());

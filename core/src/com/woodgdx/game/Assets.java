@@ -121,6 +121,7 @@ public class Assets implements Disposable, AssetErrorListener
 
         // create game resource objects
         fonts = new AssetFonts();
+        levelDecoration = new AssetLevelDecoration(atlas);
         bone = new AssetBone(atlas);
         cat_item = new AssetCat(atlas);
         chicken_item = new AssetChicken(atlas);
@@ -130,7 +131,6 @@ public class Assets implements Disposable, AssetErrorListener
         flame = new AssetFlame(atlas);
         ground = new AssetGround(atlas);
         main_character = new AssetMainCharacter(atlas);
-        levelDecoration = new AssetLevelDecoration(atlas);
         sounds = new AssetSounds(assetManager);
         music = new AssetMusic(assetManager);
     }
@@ -244,11 +244,18 @@ public class Assets implements Disposable, AssetErrorListener
     public class AssetFlame
     {
         public final AtlasRegion flame;
+        public final Animation animFlame;
 
         public AssetFlame(TextureAtlas atlas)
         {
             //Just file name no extension
             flame = atlas.findRegion("flame");
+            // Animation: Bone
+            Array<AtlasRegion> regions = atlas.findRegions("anim_flame");
+            AtlasRegion region = regions.first();
+            for (int i = 0; i < 10; i++)
+                regions.insert(0, region);
+            animFlame = new Animation(1.0f / 20.0f, regions, Animation.PlayMode.LOOP_PINGPONG);
         }
     }
 

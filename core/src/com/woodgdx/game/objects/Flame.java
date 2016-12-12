@@ -3,6 +3,8 @@ package com.woodgdx.game.objects;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.woodgdx.game.Assets;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.math.MathUtils;
 
 /**
  * Flame object class
@@ -28,6 +30,8 @@ public class Flame extends AbstractGameObject
     private void init()
     {
         dimension.set(0.5f, 0.5f);
+        setAnimation(Assets.instance.flame.animFlame);
+        stateTime = MathUtils.random(0.0f, 1.0f);
         regFlame = Assets.instance.flame.flame;
         // Set bounding box for collision detection
         bounds.set(0, 0, dimension.x, dimension.y);
@@ -44,7 +48,7 @@ public class Flame extends AbstractGameObject
         if (collected)
             return;
         TextureRegion reg = null;
-        reg = regFlame;
+        reg = animation.getKeyFrame(stateTime, true);
         batch.draw(reg.getTexture(), position.x, position.y, origin.x, origin.y, dimension.x, dimension.y, scale.x, scale.y, rotation, reg.getRegionX(), reg.getRegionY(), reg.getRegionWidth(),
                 reg.getRegionHeight(), false, false);
     }
