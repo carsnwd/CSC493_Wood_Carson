@@ -50,16 +50,22 @@ import com.woodgdx.game.util.AudioManager;
 
 public class WorldController extends InputAdapter
 {
+    //For printing out to console
     private static final String TAG = WorldController.class.getName();
 
+    //Constant value for checking bone total to progress game
     private static final int TOTAL_BONES = 10;
 
+    //Count for bones in the current level
     private int boneCount = 0;
 
+    //Current level 
     private String currentLevel = Constants.LEVEL_01;
 
+    //Reference to level
     public Level level;
 
+    //Reference to game
     private Game game;
 
     //Current lives
@@ -68,6 +74,7 @@ public class WorldController extends InputAdapter
     //Current score
     public int score;
 
+    //Delay for when to respawn.
     private float timeLeftGameOverDelay;
 
     //Tracks lives for GUI animation of lost life
@@ -79,6 +86,7 @@ public class WorldController extends InputAdapter
     // Box2D Collisions
     public World myWorld;
 
+    //Camera helper
     public CameraHelper cameraHelper;
 
     /**
@@ -101,6 +109,9 @@ public class WorldController extends InputAdapter
         initPhysics();
     }
 
+    /**
+     * Initializes physics in world
+     */
     private void initPhysics()
     {
         if (myWorld != null)
@@ -166,6 +177,12 @@ public class WorldController extends InputAdapter
         initLevel();
     }
 
+    /**
+     * Level creation (don't use?)
+     * @param width
+     * @param height
+     * @return
+     */
     private Pixmap createProceduralPixmap(int width, int height)
     {
         Pixmap pixmap = new Pixmap(width, height, Format.RGBA8888);
@@ -193,6 +210,7 @@ public class WorldController extends InputAdapter
         //Box2D way of removing objects
         if (objectsToRemove.size > 0)
         {
+            //Cycle through objects to check if collected
             for (AbstractGameObject obj : objectsToRemove)
             {
                 if (obj instanceof Bone)
@@ -253,10 +271,12 @@ public class WorldController extends InputAdapter
             objectsToRemove.removeRange(0, objectsToRemove.size - 1);
         }
 
+        //CHecks if game is over
         handleDebugInput(deltaTime);
         if (isGameOver())
         {
             timeLeftGameOverDelay -= deltaTime;
+            //If it is, then record the score and go back to the menu
             if (timeLeftGameOverDelay < 0)
             {
                 try
@@ -271,6 +291,7 @@ public class WorldController extends InputAdapter
                 backToMenu();
             }
         }
+        //Otherwise keep this disaster rolling!
         else
         {
             handleInputGame(deltaTime);
@@ -278,6 +299,7 @@ public class WorldController extends InputAdapter
         level.update(deltaTime);
         testCollisions();
         cameraHelper.update(deltaTime);
+        //If not out of lives and in water, respawn and record lives lost.
         if (!isGameOver() && isPlayerInWater())
         {
             AudioManager.instance.play(Assets.instance.sounds.liveLost);
@@ -286,7 +308,7 @@ public class WorldController extends InputAdapter
                 timeLeftGameOverDelay = Constants.TIME_DELAY_GAME_OVER;
             else
                 initLevel();
-        }
+        }//Updates GUI lives
         if (livesVisual > lives)
             livesVisual = Math.max(lives, livesVisual - 1 * deltaTime);
 

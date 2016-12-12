@@ -17,6 +17,10 @@ public class DesktopLauncher
 	private static boolean rebuildAtlas = false; //CHANGE WHEN YOU HAVE NEW ASSETS
 	private static boolean drawDebugOutline = false;
 	
+	/**
+	 * Main runner
+	 * @param arg
+	 */
 	public static void main (String[] arg) 
 	{
 	    if (rebuildAtlas) 

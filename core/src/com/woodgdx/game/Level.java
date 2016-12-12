@@ -26,7 +26,34 @@ import com.woodgdx.game.objects.Bone;
  */
 public class Level
 {
+    //For printing to console
     public static final String TAG = Level.class.getName();
+    
+    // Array containing all objects in level
+    public Array<Ground> rocks;
+
+    public MainChar mainChar;
+
+    public Array<Bone> bones;
+
+    public Array<Cat> cats;
+
+    public Array<Dog> dogs;
+
+    public Array<Chicken> chickens;
+
+    public Array<DogFoodBowl> dogFoodBowls;
+
+    public Array<Flame> flames;
+
+    // decoration
+    public Cloud_Decoration clouds;
+
+    //Background
+    public Background_Decoration background;
+
+    //Water
+    public Water_Decoration waterOverlay;
 
     /**
      * Colors stored as an enum type with
@@ -73,30 +100,10 @@ public class Level
         }
     }
 
-    // objects
-    public Array<Ground> rocks;
-
-    public MainChar mainChar;
-
-    public Array<Bone> bones;
-
-    public Array<Cat> cats;
-
-    public Array<Dog> dogs;
-
-    public Array<Chicken> chickens;
-
-    public Array<DogFoodBowl> dogFoodBowls;
-
-    public Array<Flame> flames;
-
-    // decoration
-    public Cloud_Decoration clouds;
-
-    public Background_Decoration background;
-
-    public Water_Decoration waterOverlay;
-
+    /**
+     * Constructor
+     * @param filename
+     */
     public Level(String filename)
     {
         init(filename);
